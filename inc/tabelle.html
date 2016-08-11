@@ -1,0 +1,79 @@
+<form>
+    <input type="number" id="gameID" name="gameID" value="1" />
+    <br>
+    <input type="text" id="username" name="username" />
+    <br>
+    <input type="email" id="email" name="email" />
+</form>
+
+<input class="button" name="submit" type="submit" value="submit" onclick="getFormData()" />
+
+<p id="game" class="game"></p>
+<p id="text"></p>
+<p id="mail"></p>
+
+
+
+
+<!--///////////////////////////////////////////////////////////-->
+<!--HTML ENDS HERE-->
+<!--///////////////////////////////////////////////////////////-->
+
+<script>
+    // Get a reference to the database service
+    var database = firebase.database();
+
+    var databaseRef = database.ref().child("test");
+
+    //Get Data from Form Elements and assign them to
+    function getFormData() {
+        var gameID = document.getElementById('gameID').value;
+        var name = document.getElementById('username').value;
+        var email = document.getElementById('email').value;
+
+        var gamesnew = '{';
+        var games = '"' + gameID + '":{"username":"' + name + '", "email":{"address":"' + email + '"}}';
+        games += ',"' + gameID + 1 + '":{"username":"' + name + '", "email":"' + email + '"}';
+        gamesnew += games + "}";
+        var games = jQuery.parseJSON(gamesnew);
+        console.log(games);
+        //Call Function to enter Data into Database
+        //writeUserData(gameID, name, email);
+
+        databaseRef.update(games);
+
+    }
+
+    if (document.getElementById('gameID').value > 1) {
+        var gameID = document.getElementById('gameID').value;
+    } else {
+        var gameID = 1;
+    };
+
+    databaseRef.on('value',
+        function(snapshot) {
+            var output = snapshot.val();
+            output = JSON.stringify(output, null, 2);
+            console.log(output);
+            updateOutput(output);
+        });
+
+    firebase.database().ref('/test/' + gameID + '/username').on('value', function(text) {
+        updateText(text.val());
+    });
+    firebase.database().ref('/test/' + gameID + '/email/address').on('value', function(email) {
+        updateMail(email.val());
+    });
+
+    function updateOutput(output) {
+        document.getElementById("game").innerHTML = output;
+    }
+
+    function updateText(text) {
+        document.getElementById("text").innerHTML = text;
+    }
+
+    function updateMail(mail) {
+        document.getElementById("mail").innerHTML = mail;
+    }
+</script>

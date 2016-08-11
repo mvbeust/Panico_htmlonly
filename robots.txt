@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: offline.html
+Disallow: /js/
+Disallow: /css/
+Disallow: ergebnis
+Disallow: 404.php
+Disallow: /font/

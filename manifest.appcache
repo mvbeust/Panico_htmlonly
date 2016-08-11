@@ -1,0 +1,26 @@
+CACHE MANIFEST
+# 22-10-2015: v0.972
+
+# Explicitly cached entries
+css/materializenew.min.css
+
+
+# offline.html will be displayed if the user is offline
+FALLBACK:
+/ index.html
+
+# All other resources (e.g. sites) require the user to be online.
+NETWORK:
+*
+
+# Additional resources to cache
+CACHE:
+inc/footer.html
+img/materializecss.png
+img/rss.png
+img/twitter.png
+img/maxvonbeust.png
+/img/logo.png
+/img/logonav.png
+favicon.ico
+https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js

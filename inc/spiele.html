@@ -1,0 +1,61 @@
+<div class="row" id="game">
+    <div id="loading" class="animated pulse infinite center-align" style="padding-top:50px">
+        <a href="javascript:history.go(0)"><img src="/img/logo.png" height="70px"></a>
+    </div>
+</div>
+
+
+<!--///////////////////////////////////////////////////////////-->
+<!--HTML ENDS HERE-->
+<!--///////////////////////////////////////////////////////////-->
+
+<script>
+    // Get a reference to the database service
+    var database = firebase.database();
+    var Start = Math.floor(Date.now() / 1000);
+    var databaseRef = database.ref('games').orderByChild('Timestamp');
+
+    databaseRef.on('value',
+        function(snapshot) {
+            var output = snapshot.val();
+            output = JSON.stringify(output, null, 2);
+            updateOutput(output);
+        });
+
+
+    function updateOutput(output) {
+        var data = JSON.parse(output);
+        var finaloutput = "";
+        for (var i in data) {
+            var competition = data[i].Competition;
+            var date = data[i].Date;
+            var fortschritt = data[i].Fortschritt;
+            var id = data[i].ID;
+            var length = data[i].Length;
+            var liga = data[i].Liga;
+            var m1 = data[i].M1;
+            var m2 = data[i].M2;
+            var scorem1 = data[i].ScoreM1;
+            var scorem2 = data[i].ScoreM2;
+            var sieger = data[i].Sieger;
+            var timestamp = data[i].Timestamp;
+            finaloutput += "<div class='col s12 m6'><div class='card'><div class='card-content'><p style='font-size:larger; font-weight:bold'>";
+            finaloutput += m1 + " vs. " + m2 + i;
+            finaloutput += "</p><p>";
+            finaloutput += scorem1 + " : " + scorem2 + "<br>" + date;
+            finaloutput += "<p class='number hide'>" + timestamp + "</p>";
+            finaloutput += "</p></div></div></div>";
+        }
+        document.getElementById("game").innerHTML = finaloutput;
+        var $grid = $('.row').isotope({
+          getSortData: {
+            number: '.number parseInt', // text from
+          }
+        });
+          $grid.isotope({ sortBy : 'number' });
+
+
+    }
+
+
+</script>

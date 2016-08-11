@@ -1,0 +1,100 @@
+<form id="foo">
+    <div class="row" id="game">
+        <div id="loading" class="animated pulse infinite center-align" style="padding-top:50px">
+            <a href="javascript:history.go(0)"><img src="/img/logo.png" height="70px"></a>
+        </div>
+    </div>
+</form>
+
+
+
+<!--///////////////////////////////////////////////////////////-->
+<!--HTML ENDS HERE-->
+<!--///////////////////////////////////////////////////////////-->
+
+<script>
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+
+    // Get a reference to the database service
+    var database = firebase.database();
+    var Start = Math.floor(Date.now() / 1000);
+    var databaseRef = database.ref('games').orderByChild('ScoreM1').equalTo("").limitToFirst(10);
+    databaseRef.on('value',
+        function(snapshot) {
+            var output = snapshot.val();
+            updateOutput(output);
+        });
+
+    //Define Variables and Arrays
+    var kogames = ["Normal-ko", "Achtelfinale", "Viertelfinale", "Halbfinale", "Finale", "Bonusspiel"]
+
+    function updateOutput(output) {
+        var data = output;
+        //var data = JSON.parse(output);
+        console.log(data);
+         output.sort(function(a, b) {
+              return parseFloat(a.Timestamp) - parseFloat(b.Timestamp);
+          });
+        var finaloutput = "";
+        for (var i in data) {
+            var competition = data[i].Competition;
+            var date = data[i].Date;
+            var fortschritt = data[i].Fortschritt;
+            if (kogames.indexOf(fortschritt) >= 0) {
+                var art = 2;
+            } else {
+                var art = 3;
+            }
+            var id = data[i].ID;
+            var length = data[i].Length;
+            var liga = data[i].Liga;
+            var m1 = data[i].M1;
+            var m2 = data[i].M2;
+            var scorem1 = data[i].ScoreM1;
+            var scorem2 = data[i].ScoreM2;
+            var sieger = data[i].Sieger;
+            var timestamp = data[i].Timestamp;
+            var beschreibung = competition + " (" + fortschritt + ")";
+            var abgegeben = "";
+            if (timestamp < Start) {
+                if (art == 1) {
+                    //Wenn alle getippt haben, keine Eingabe mehr geben.
+                    finaloutput += "<div class='col s12 m6 niemals'><div class='card' style='background-color:#F6F6FF'><div class='card-content'><p style='font-size:larger; font-weight:bold'>" + m1 + " vs. " + m2 +
+                        "<span class='badge'><i class='material-icons small' style='color:#3f51b5'>done_all</i></span></p><p style='font-size:smaller; font-weight:inherit; color:#999'>" + beschreibung +
+                        "</p></div></div></div>";
+                } else if (art == 2) { //Wenn es ein ko-Spiel ist
+                    finaloutput += " <div style='display:none'> <select name='Spiel" + id + "Nr'> <option> " + id + " </option> </select> </div>"; // SpielNummer
+                    finaloutput += " <div class='col s12 m6 niemals'> <div class='card'> <div class='card-content'> <p style='font-size:larger; font-weight:bold'>" + m1 + " vs. " + m2 +
+                        " </p> <p style='font-size:smaller; font-weight:inherit; color:#999'> " + beschreibung + " </p> <p><div class='input-field col s12 m6'><input id='Spiel" + id + "1M1id' type='number' class='validate' name='Spiel" + id +
+                        "ScoreM1'> <label for='Spiel" + id + "1M1id'> Heim </label> </div> <div class='input-field col s12 m6'><input id='Spiel" + id + "1M2id' type='number' class='validate' name='Spiel" + id +
+                        "ScoreM2'><label for='Spiel" + id + "1M2id'> Gast </label> </div> </p> <div> <p class='hide-on-med-and-down col s12 m6'> <select name='Spiel" + id +
+                        "Length'> <option value='' disabled selected> Länge </option> <option value='90'> 90 </option> <option value='120'> 120 </option> <option value='11er'> 11er </option> </select> </p> <p class ='hide-on-large-only col s12 m6' style='padding-bottom: 10px'><select class='browser-default' name='Spiel" +
+                        id +
+                        "Length'><option value='' disabled selected> Länge </option> <option value='90'> 90 </option> <option value='120'> 120 </option> <option value='11er'> 11er </option> </select> </p> <p class ='hide-on-med-and-down col s12 m6'><select name='Spiel" +
+                        id + "Sieger'><option value='' disabled selected> Sieger </option> <option value='" + m1 + "'> " + m1 + " </option> <option value='" + m2 + "'> " + m2 +
+                        " </option> </select> </p> <p class='hide-on-large-only col s12 m6' style='padding-bottom: 20px'> <select class='browser-default' name='Spiel" + id +
+                        "Sieger'><option value='' disabled selected> Sieger </option> <option value='" + m1 + "'> " + m1 + " </option> <option value='" + m2 + "'> " + m2 + " </option> </select> </p> </div></div> </div> </div>";
+                } else if (art == 3) { // Wenn es ein normales Spiel ist
+                    finaloutput += " <div style='display:none'> <select name='Spiel" + id + "Nr'> <option> " + id + " </option> </select> </div>";
+                    finaloutput += " <div class='col s12 m6 niemals'> <div class='card'> <div class='card-content'> <p style='font-size:larger; font-weight:bold'> " + m1 + " vs. " + m2 +
+                        " </p> <p style='font-size:smaller; font-weight:inherit; color:#999'> " + beschreibung + " </p> <p>  <div class='input-field col s12 m6'><input id='Spiel" + id + "1M1id' type='number'  class='validate'  name='Spiel" +
+                        id + "ScoreM1'>  <label  for='Spiel" + id + "1M1id'> Heim </label> </div> <div class='input-field col s12 m6'><input id='Spiel" + id + "1M2id' type='number' class='validate' name='Spiel" + id +
+                        "ScoreM2'> <label for='Spiel" + id + "M2id'> Gast </label> </div> </p> <p style='font-size:smaller; font-weight:inherit; color:#F90'>" + abgegeben + "</p></div></div></div>";
+                }
+            }
+        }
+        document.getElementById("game").innerHTML = finaloutput;
+        var $grid = $('.row').isotope({
+            getSortData: {
+                number: '.number parseInt', // text from
+            }
+        });
+        $grid.isotope({
+            sortBy: 'number'
+        });
+
+
+    }
+</script>

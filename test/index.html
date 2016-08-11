@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html manifest="/manifest.appcache">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Neue Spiele - Panicotippspiel</title>
+
+    <!--Meta Tags-->
+    <meta name="description" content="Das wohl epischste Tippspiel das das Internet je gesehen hat. Private Tipp für verschiedene Ligen und Länder: Deutschland, Österreich, England, Italien, Spanien, Frankreich und europäische Wettbewerbe. Alles nach eigenem Geschmack."
+    />
+
+    <!--Dokumente CSS-->
+    <link rel="stylesheet" href="/css/materializenew.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Icons-->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/img/logo.png">
+    <link rel="icon" sizes="228x228" href="/img/logo.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    <link rel="stylesheet" href="/css/animate.min.css">
+    <link href="http://www.panicotippspiel.com/feed" rel="alternate" type="application/rss+xml" title="Panicotippspiel News" />
+
+    <!--Mobile Optimierungen-->
+    <meta id="theme-color" name="theme-color" content="#3f51b5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Tippspiel">
+    <meta name="application-name" content="Tippspiel" />
+    <script src="/js/stay_standalone.js" type="text/javascript"></script>
+
+    <!--MS Optimizations-->
+    <meta name="msapplication-TileImage" content="/logo.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+    <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+</head>
+
+<body onload="pageBuilder()">
+    <header id="navigation"></header>
+    <main class="container">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <form id="NewGame">
+                        </form>
+                        <input class="btn" name="submit" type="submit" value="Submit Games" onclick="submitNewGame()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Value-->
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <table id="GamesinDB" class="striped">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p id="datevalue"></p>
+        <p id="ID"></p>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="/js/materialize.min.js"></script>
+    <script src="/test/script.js"></script>
+    <footer id="footer" class="page-footer hide-on-med-and-down">
+    </footer>
+</body>
+
+</html>
