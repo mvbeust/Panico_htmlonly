@@ -6,12 +6,11 @@
     <title>Panicotippspiel</title>
 
     <!--Meta Tags-->
-    <meta name="description" content="Das wohl epischste Tippspiel das das Internet je gesehen hat. Private Tipp für verschiedene Ligen und Länder: Deutschland, Österreich, England, Italien, Spanien, Frankreich und europäische Wettbewerbe. Alles nach eigenem Geschmack."
+    <meta name="description" content="Das wohl epischste Tippspiel das das Internet je gesehen hat. Private Tipps für verschiedene Ligen und Länder: Deutschland, Österreich, England, Italien, Spanien, Frankreich und europäische Wettbewerbe. Alles nach eigenem Geschmack."
     />
 
     <!--Dokumente CSS-->
-    <link type="text/css" rel="stylesheet" href="/css/materialize.min.css" media="screen,projection" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/css/materializenew.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Icons-->
     <link rel="manifest" href="/manifest.json">
@@ -35,146 +34,25 @@
     <!--MS Optimizations-->
     <meta name="msapplication-TileImage" content="/logo.png">
     <meta name="msapplication-TileColor" content="#3f51b5">
-
 </head>
 
-<body>
-    <header id="navigation">
-        <!--Navigation-->
+<body onload="TippenPageBuilder()">
+    <header id="navigation"></header>
+    <main class="container">
+      <!--Formular für Tippspiel-->
+        <form id="Tippen">
+        </form>
+        <input class="btn" name="submit" type="submit" value="Submit Games" onclick="submitNewGame()" />
 
-        <div class="navbar-fixed">
-            <nav class="indigo" style="overflow:visible">
-                <div class="nav-wrapper">
-                    <div class="container"><a href="/" class="brand-logo" style="font-weight:300; top:0px">Panicotippspiel</a> </div>
-                    <a href="#" data-activates="mobile-demo" class="button-collapse waves-effect"><i class="mdi-navigation-menu"></i></a>
-                    <div class="container">
-                        <ul class="right hide-on-med-and-down">
-                            <li class="waves-effect waves-indigo"><a href="#" onclick="changeview('/inc/tippen.html', 'tippen')">Tippspiel</a></li>
-                            <li class="waves-effect waves-indigo"><a href="#" onclick="changeview('/inc/tabelle.html', 'tabelle')">Tabelle</a></li>
-                            <li class="waves-effect waves-indigo"><a onclick="changeview('/inc/spiele.html', 'spiele')">Spiele</a></li>
-                            <li class="waves-effect waves-indigo"><a onclick="changeview('/inc/ergebnis.html', 'ergebnis')">Ergebnis</a></li>
-                            <li class="waves-effect waves-indigo" style="height:64px"><a href="stats"><i class="mdi-editor-insert-chart"></i></a></li>
-                            <li class="waves-effect waves-indigo" style="height:64px"><a href="new"><i class="mdi-content-add-circle-outline"></i></a></li>
-                            <li class="waves-effect waves-indigo" style="height:64px"><a href="javascript:history.go(0)"><i class="mdi-navigation-refresh"></i></a></li>
-                        </ul>
-                    </div>
-                    <ul class="side-nav" id="mobile-demo" style="overflow-y:auto">
-                        <li class="bold" style="border-bottom:solid; border-bottom-color:#D0D0D0; border-bottom-width:1px; background: #D0D0D0">
-                            <a href="javascript:history.go(0)" style="padding-left:75px; padding-top:24px"><img height="50px" src="/img/logonav.png" /></a>
-                        </li>
-                        <div class="waves-effect">
-                            <a href="#" onclick="changeview('/inc/tippen.html', 'tippen')" style="padding:0px">
-                                <li style="font-weight: bold; width:240px; padding-left:30px">Tippspiel</li>
-                            </a>
-                        </div>
-                        <div class="waves-effect">
-                            <a href="#" onclick="changeview('/inc/tabelle.html', 'tabelle')" style="padding:0px">
-                                <li style="font-weight: bold; width:240px; padding-left:30px">Tabelle anzeigen</li>
-                            </a>
-                        </div>
-                        <div class="waves-effect">
-                            <a onclick="changeview('/inc/spiele.html', 'spiele')" style="padding:0px">
-                                <li style="font-weight: bold; width:240px; padding-left:30px">Spiele</li>
-                            </a>
-                        </div>
-                        <div class="waves-effect">
-                            <a href="stats.php" style="padding:0px">
-                                <li style="font-weight: bold; border-bottom:solid; border-bottom-color:#D0D0D0; border-bottom-width:1px; width:240px; padding-left:30px">Statistiken</li>
-                            </a>
-                        </div>
-                        <div class="waves-effect">
-                            <a href="#" onclick="changeview('/inc/ergebnis.html', 'ergebnis')" style="padding:0px">
-                                <li style="font-weight: bold; border-bottom:solid; border-bottom-color:#D0D0D0; border-bottom-width:1px; width:240px; padding-left:30px">Ergebnis</li>
-                            </a>
-                        </div>
-                        <div class="waves-effect">
-                            <a style="color:#D0D0D0; padding:0px" href="faq.php">
-                                <li style="font-weight: bold; width:240px; padding-left:30px">FAQ</li>
-                            </a>
-                        </div>
-                        <div class="waves-effect">
-                            <a style="color:#D0D0D0; padding:0px" href="ergebnis">
-                                <li style="font-weight: bold; width:240px; padding-left:30px">Ergebniseingabe</li>
-                            </a>
-                        </div>
-                        <div class="waves-effect">
-                            <a style="color:#D0D0D0; padding:0px" href="archiv.php">
-                                <li style="font-weight: bold; width:240px; padding-left:30px">Archiv</li>
-                            </a>
-                        </div>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header>
-    <main class="container" id="container">
-
+        <p id="datevalue"></p>
+        <p id="ID"></p>
     </main>
-
-    <!--Skripte-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="js/jquery.timeago.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        if (!window.jQuery) {
-            document.write('<script src="bin/jquery-2.1.1.min.js"><\/script>');
-        }
-    </script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script src="js/init.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
-    <script src="/js/isotope.pkgd.min.js"></script>
-
     <footer id="footer" class="page-footer hide-on-med-and-down">
     </footer>
-    <script>
-        //firebase configuration
-        var config = {
-            apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
-            authDomain: "project-985851437142041413.firebaseapp.com",
-            databaseURL: "https://project-985851437142041413.firebaseio.com",
-            storageBucket: "project-985851437142041413.appspot.com",
-        };
-        //Initalize the firebase app
-        firebase.initializeApp(config);
-
-        function isInArray(value, array) {
-            return array.indexOf(value) > -1;
-        };
-        $(window).unload( function() {
-            hrefchange();
-        });
-        $(document).ready(function() {
-            hrefchange()
-        });
-
-        function hrefchange() {
-            var currentpath = location.pathname;
-            var pages = ["/tabelle", "/tippen", "/spiele","/ergebnis"];
-            $("#footer").load('/inc/footer.html');
-            //console.log(currentpath);
-            if (isInArray(currentpath, pages)) {
-                var pagetitle = currentpath;
-                currentpath = "/inc" + currentpath + ".html";
-                changeview(currentpath, pagetitle);
-            } else {
-                $("#container").load('/inc/tabelle.html');
-            };
-
-        };
-
-        function changeview(page, pagetitle) {
-            $("#container").load(page);
-            $('#sidenav-overlay').click();
-            if (typeof(history.pushState) != "undefined") {
-                var fullpagetitle = pagetitle + "- Panciotippspiel";
-                var obj = {
-                    Title: fullpagetitle,
-                    Url: pagetitle
-                };
-                history.pushState(obj, obj.Title, obj.Url);
-            } else {
-                alert("Browser does not support HTML5.");
-            }
-        }
-    </script>
 </body>
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="/js/materialize.min.js"></script>
+<script src="/js/script.js"></script>
+
+</html>
