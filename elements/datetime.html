@@ -1,0 +1,13 @@
+<script>
+    var wochentag = new Array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
+    var monat = new Array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
+    var strDateTime = "2016-08-16T22:58:10+02:00";
+    var myDate = new Date(strDateTime);
+    var stunden = myDate.getHours();
+    minuten = ("0" + myDate.getMinutes()).slice(-2);
+    var tag = myDate.getDate();
+    var monatDesJahres = myDate.getMonth();
+    var tagInWoche = myDate.getDay();
+    var datum = "Spiel um " + stunden + ":" + minuten + " Uhr";
+    document.getElementById("anpfiff0").innerHTML = datum;
+</script>

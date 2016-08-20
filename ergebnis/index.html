@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Panicotippspiel</title>
+    <title>Ergebnis - Panicotippspiel</title>
 
     <!--Meta Tags-->
-    <meta name="description" content="Das wohl epischste Tippspiel das das Internet je gesehen hat. Private Tipps für verschiedene Ligen und Länder: Deutschland, Österreich, England, Italien, Spanien, Frankreich und europäische Wettbewerbe. Alles nach eigenem Geschmack."
+    <meta name="description" content="Ergebnisse eintragen und Punkte verteilen."
     />
 
     <!--Dokumente CSS-->
@@ -36,43 +36,38 @@
     <meta name="msapplication-TileColor" content="#3f51b5">
 </head>
 
-<body onload="TippenPageBuilder()">
+<body onload="ErgebnisPageBuilder()">
     <header id="navigation"></header>
     <main class="container">
         <!--Formular für Tippspiel-->
-        <form id="Tippen">
-            <div style="opacity: 1; background: #fff;width:  100%;  height: 100%; z-index:  10;  top:  0; left: 0; position: fixed; " class="valign-wrapper">
-                <div style="width: 15%; margin: 0 auto;">
-                    <div class="preloader-wrapper big active">
-                        <div class="spinner-layer spinner-blue-only">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="gap-patch">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="circle-clipper right">
-                                <div class="circle"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <form id="Ergebnis">
+          <div style="opacity: 1; background: #fff;width:  100%;  height: 100%; z-index:  10;  top:  0; left: 0; position: fixed; " class="valign-wrapper">
+              <div style="width: 15%; margin: 0 auto;">
+                  <div class="preloader-wrapper big active">
+                      <div class="spinner-layer spinner-blue-only">
+                          <div class="circle-clipper left">
+                              <div class="circle"></div>
+                          </div>
+                          <div class="gap-patch">
+                              <div class="circle"></div>
+                          </div>
+                          <div class="circle-clipper right">
+                              <div class="circle"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
         </form>
-        <input class="btn right" name="submit" type="submit" value="Tipps abgeben" onclick="submitTipps(CurrentGames)" />
-        <div class="row">
-        </div>
-        <p id="datevalue"></p>
-        <p id="ID"></p>
+        <input class="btn" name="submit" type="submit" value="Ergebnisse eintragen" onclick="submitErgebnis(ErgebnisGames)" />
     </main>
     <footer id="footer" class="page-footer hide-on-med-and-down">
     </footer>
 </body>
 <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
-<script src="/js/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script src="/js/materialize.min.js"></script>
-<script src="/js/isotope.pkgd.min.js"></script>
 <script src="/js/script.js"></script>
-
+<script src="/js/isotope.pkgd.min.js"></script>
 
 </html>

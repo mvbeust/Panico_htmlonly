@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html manifest="/manifest.appcache">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Archiv - Panicotippspiel</title>
+
+    <!--Meta Tags-->
+    <meta name="description" content="Alte Tabellen und Statistiken im Archiv" />
+
+    <!--Dokumente CSS-->
+    <link rel="stylesheet" href="/css/materializenew.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Icons-->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/img/logo.png">
+    <link rel="icon" sizes="228x228" href="/img/logo.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    <link rel="stylesheet" href="/css/animate.min.css">
+    <link href="http://www.panicotippspiel.com/feed" rel="alternate" type="application/rss+xml" title="Panicotippspiel News" />
+
+    <!--Mobile Optimierungen-->
+    <meta id="theme-color" name="theme-color" content="#3f51b5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Tippspiel">
+    <meta name="application-name" content="Tippspiel" />
+    <script src="/js/stay_standalone.js" type="text/javascript"></script>
+
+    <!--MS Optimizations-->
+    <meta name="msapplication-TileImage" content="/logo.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+</head>
+
+<body onload="OfflinePageBuilder()">
+    <header id="navigation"></header>
+    <main class="container">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title" style="color:black">Panicotabelle (Saison 2015/16)</span>
+                <table class="bordered highlight">
+                    <tbody>
+                        <tr>
+                            <th>Platz</th>
+                            <th>Name</th>
+                            <th>Panico</th>
+                            <th class="grey-text">1.<small class="hide-on-small-only">Plätze</small><small class="hide-on-med-and-up">P</small></th>
+                            <th class="grey-text">2.<small class="hide-on-small-only">Plätze</small><small class="hide-on-med-and-up">P</small></th>
+                            <th class="grey-text hide-on-med-and-down">Punkte</th>
+                        </tr>
+                        <tr>
+                            <td>1.</td>
+                            <td>Max</td>
+                            <td><b>63,0</b></td>
+                            <td class="grey-text">5</td>
+                            <td class="grey-text">5</td>
+                            <td class="grey-text  hide-on-med-and-down">406,0</td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>Hans</td>
+                            <td><b>26,0</b></td>
+                            <td class="grey-text">2</td>
+                            <td class="grey-text">3</td>
+                            <td class="grey-text  hide-on-med-and-down">351,0</td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>Franz</td>
+                            <td><b>21,5</b></td>
+                            <td class="grey-text">2</td>
+                            <td class="grey-text">3</td>
+                            <td class="grey-text  hide-on-med-and-down">377,0</td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>Mario</td>
+                            <td><b>11,5</b></td>
+                            <td class="grey-text">2</td>
+                            <td class="grey-text">1</td>
+                            <td class="grey-text  hide-on-med-and-down">337,5</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p></p>
+            </div>
+        </div>
+        <ul class="collapsible" data-collapsible="expandable" style="background-color:#eeeeee">
+            <li class="active">
+                <div class="collapsible-header active" style="font-weight: bold"><i class="material-icons">today</i>Juli (+12)</div>
+                <div class="collapsible-body" style="padding: 20px;  margin: 0; background-color:#f5f5f5">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                                <th class="grey-text hide-on-small-only
+                    ">1<small>Tag</small></th>
+                                <th class="grey-text ">2<small class="hide-on-small-only ">Tage</small><small class="hide-on-med-and-up ">d</small></th>
+                                <th class="grey-text hide-on-med-and-down ">7<small class="hide-on-small-only ">Tage</small><small class="hide-on-med-and-up
+                    ">d</small></th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Max</td>
+                                <td><b>11</b></td>
+                                <td class="grey-text hide-on-small-only ">+0</td>
+                                <td class="grey-text ">+0</td>
+                                <td class="grey-text hide-on-med-and-down ">+0</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Franz</td>
+                                <td><b>4</b></td>
+                                <td class="grey-text hide-on-small-only ">+0</td>
+                                <td class="grey-text
+                    ">+0</td>
+                                <td class="grey-text hide-on-med-and-down ">+0</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Hans</td>
+                                <td><b>3</b></td>
+                                <td class="grey-text hide-on-small-only ">+0</td>
+                                <td class="grey-text ">+0</td>
+                                <td class="grey-text hide-on-med-and-down
+                    ">+0</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Mario</td>
+                                <td><b>1</b></td>
+                                <td class="grey-text hide-on-small-only ">+0</td>
+                                <td class="grey-text ">+0</td>
+                                <td class="grey-text hide-on-med-and-down ">+0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons
+                    ">history</i>Juni (+11)</div>
+                <div class="collapsible-body " style="padding: 20px;  margin: 0; background-color:#f5f5f5">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Max</td>
+                                <td><b>45,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Franz</td>
+                                <td><b>43</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Hans</td>
+                                <td><b>39,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Mario</td>
+                                <td><b>35</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>Mai (+10)</div>
+                <div class="collapsible-body " style="padding: 20px; margin: 0; background-color:#f5f5f5 ">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Hans</td>
+                                <td><b>43</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Franz</td>
+                                <td><b>41</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Max</td>
+                                <td><b>41</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Mario</td>
+                                <td><b>35,5</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>April (+9)</div>
+                <div class="collapsible-body " style="padding: 20px;  margin: 0; background-color:#f5f5f5">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Max</td>
+                                <td><b>45</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Hans</td>
+                                <td><b>42</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Franz</td>
+                                <td><b>38</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Mario</td>
+                                <td><b>30</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>März (+8)</div>
+                <div class="collapsible-body " style="padding: 20px; margin: 0; background-color:#f5f5f5 ">
+                    <table class="bordered highlight
+                    ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Max</td>
+                                <td><b>38</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Hans</td>
+                                <td><b>37,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Franz</td>
+                                <td><b>36</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Mario</td>
+                                <td><b>31</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>Februar (+7)</div>
+                <div class="collapsible-body " style="padding: 20px;  margin: 0; background-color:#f5f5f5">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Max</td>
+                                <td><b>44</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Hans</td>
+                                <td><b>41,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Mario</td>
+                                <td><b>40</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Franz</td>
+                                <td><b>38,5</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>Januar (+6)</div>
+                <div class="collapsible-body " style="padding: 20px; margin: 0; background-color:#f5f5f5 ">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Mario</td>
+                                <td><b>21,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Max</td>
+                                <td><b>19,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Franz</td>
+                                <td><b>17,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Hans</td>
+                                <td><b>14,5</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>Dezember (+5)</div>
+                <div class="collapsible-body " style="padding: 20px;  margin: 0; background-color:#f5f5f5">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Max</td>
+                                <td><b>41</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Mario</td>
+                                <td><b>33</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Franz</td>
+                                <td><b>31</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Hans</td>
+                                <td><b>20,5</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>November (+4)</div>
+                <div class="collapsible-body " style="padding: 20px; margin: 0; background-color:#f5f5f5 ">
+                    <table class="bordered highlight
+                    ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Hans</td>
+                                <td><b>31,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Franz</td>
+                                <td><b>26,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Max</td>
+                                <td><b>23,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Mario</td>
+                                <td><b>20,5</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>Oktober (+3)</div>
+                <div class="collapsible-body " style="padding: 20px;  margin: 0; background-color:#f5f5f5">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Mario</td>
+                                <td><b>43</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Max</td>
+                                <td><b>37,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Franz</td>
+                                <td><b>34,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Hans</td>
+                                <td><b>28,5</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>September (+2)</div>
+                <div class="collapsible-body ">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Franz</td>
+                                <td><b>39</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Max</td>
+                                <td><b>33</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Hans</td>
+                                <td><b>30,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Mario</td>
+                                <td><b>21,5</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header " style="font-weight: bold "><i class="material-icons ">history</i>August (+1)</div>
+                <div class="collapsible-body " style="padding: 20px;  margin: 0; background-color:#f5f5f5">
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Platz</th>
+                                <th>Name</th>
+                                <th>Punkte</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Franz</td>
+                                <td><b>28</b></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Max</td>
+                                <td><b>27</b></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Mario</td>
+                                <td><b>25,5</b></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Hans</td>
+                                <td><b>19</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+        </ul>
+        <div id="statstable ">
+            <div class="card ">
+                <div class="card-content ">
+                    <span class="card-title " style="color:black ">Punkte (Saison 2015/16)</span>
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th></th>
+                                <th>Franz</th>
+                                <th>Hans</th>
+                                <th>Mario</th>
+                                <th>Max</th>
+                            </tr>
+                            <tr>
+                                <td><a class="tooltipped " data-position="right " data-delay="50 " data-tooltip="Anzahl der Monatspunkte pro Spiel " style="font-weight: normal; color: rgba(0,0,0,0.87); text-transform: none; ">Punkte/Spiel</a></td>
+                                <td>0,906</td>
+                                <td>0,844</td>
+                                <td>0,811</td>
+                                <td>0,976</td>
+                            </tr>
+                            <tr>
+                                <td><a class="tooltipped " data-position="right " data-delay="50 " data-tooltip="Anzahl der Punkte, die du für einen Panico gesammelt hast " style="font-weight: normal; color: rgba(0,0,0,0.87); text-transform: none; ">Punkte/Panico</a></td>
+                                <td>17,53</td>
+                                <td>13,50</td>
+                                <td>29,35</td>
+                                <td>6,44</td>
+                            </tr>
+                            <tr>
+                                <td><a class="tooltipped " data-position="right " data-delay="50 " data-tooltip="Anzahl der nicht getippten Spiele " style="font-weight: normal; color: rgba(0,0,0,0.87); text-transform: none; ">Non-Tipps</a></td>
+                                <td>11</td>
+                                <td>15</td>
+                                <td>59</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td><a class="tooltipped " data-position="right " data-delay="50 " data-tooltip="Anzahl deiner Punkte durch Non-Tipps " style="font-weight: normal; color: rgba(0,0,0,0.87); text-transform: none; ">Punkte von NTs</a></td>
+                                <td>-8</td>
+                                <td>-11</td>
+                                <td>-18</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td><a class="tooltipped " data-position="right " data-delay="50 " data-tooltip="Anzahl der Monatspunkte pro Non-Tipp " style="font-weight: normal; color: rgba(0,0,0,0.87); text-transform: none; ">Punkte/Non-Tipp</a></td>
+                                <td>-0,727</td>
+                                <td>-0,733</td>
+                                <td>-0,305</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td><a class="tooltipped " data-position="right " data-delay="50 " data-tooltip="Schätzung, wie viele Punkte man durch NTs verloren hat. " style="font-weight: normal; color: rgba(0,0,0,0.87); text-transform: none; ">Verlorene Punkte</a></td>
+                                <td>18,0</td>
+                                <td>23,7</td>
+                                <td>65,8</td>
+                                <td>-1,0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p></p>
+                </div>
+            </div>
+            <div class="card ">
+                <div class="card-content "><span class="card-title " style="color:black ">Ligen (Punkte/Spiel) (Saison 2015/16)</span>
+                    <table class="bordered highlight ">
+                        <tbody>
+                            <tr>
+                                <th>Liga</th>
+                                <th>Franz</th>
+                                <th>Hans</th>
+                                <th>Mario</th>
+                                <th>Max</th>
+                                <th class="hide-on-med-and-down ">Anteil</th>
+                            </tr>
+                            <tr>
+                                <td>Deutschland</td>
+                                <td style="background-color:#C8E6C9; ">1,29</td>
+                                <td>1,12</td>
+                                <td>1,16</td>
+                                <td style="background-color:#FFCDD2; ">1,04</td>
+                                <td class="hide-on-med-and-down ">15%</td>
+                            </tr>
+                            <tr>
+                                <td>Champions League</td>
+                                <td style="background-color:#C8E6C9; ">1,18</td>
+                                <td>1,13</td>
+                                <td style="background-color:#FFCDD2; ">0,90</td>
+                                <td>1,09</td>
+                                <td class="hide-on-med-and-down ">14%</td>
+                            </tr>
+                            <tr>
+                                <td>Italien</td>
+                                <td>0,88</td>
+                                <td style="background-color:#FFCDD2; ">0,62</td>
+                                <td>0,68</td>
+                                <td style="background-color:#C8E6C9; ">1,05</td>
+                                <td class="hide-on-med-and-down ">11%</td>
+                            </tr>
+                            <tr>
+                                <td>Europa League</td>
+                                <td style="background-color:#FFCDD2; ">0,78</td>
+                                <td>0,97</td>
+                                <td>0,88</td>
+                                <td style="background-color:#C8E6C9; ">1,14</td>
+                                <td class="hide-on-med-and-down ">11%</td>
+                            </tr>
+                            <tr>
+                                <td>England</td>
+                                <td style="background-color:#C8E6C9; ">0,79</td>
+                                <td>0,65</td>
+                                <td style="background-color:#FFCDD2; ">0,51</td>
+                                <td>0,65</td>
+                                <td class="hide-on-med-and-down ">10%</td>
+                            </tr>
+                            <tr>
+                                <td>Österreich</td>
+                                <td style="background-color:#FFCDD2; ">0,47</td>
+                                <td>0,48</td>
+                                <td>0,79</td>
+                                <td style="background-color:#C8E6C9; ">1,09</td>
+                                <td class="hide-on-med-and-down ">7%</td>
+                            </tr>
+                            <tr>
+                                <td>Spanien</td>
+                                <td style="background-color:#FFCDD2; ">0,61</td>
+                                <td>0,69</td>
+                                <td style="background-color:#C8E6C9; ">0,83</td>
+                                <td>0,72</td>
+                                <td class="hide-on-med-and-down ">6%</td>
+                            </tr>
+                            <tr>
+                                <td>Freundschaft</td>
+                                <td>0,58</td>
+                                <td style="background-color:#C8E6C9; ">0,89</td>
+                                <td style="background-color:#FFCDD2; ">0,37</td>
+                                <td>0,68</td>
+                                <td class="hide-on-med-and-down ">5%</td>
+                            </tr>
+                            <tr>
+                                <td>Länderspiel</td>
+                                <td style="background-color:#C8E6C9; ">1,16</td>
+                                <td style="background-color:#FFCDD2; ">0,91</td>
+                                <td style="background-color:#FFCDD2; ">0,91</td>
+                                <td>0,97</td>
+                                <td class="hide-on-med-and-down ">4%</td>
+                            </tr>
+                            <tr>
+                                <td>Frankreich</td>
+                                <td>0,73</td>
+                                <td style="background-color:#FFCDD2; ">0,47</td>
+                                <td>0,67</td>
+                                <td style="background-color:#C8E6C9; ">0,80</td>
+                                <td class="hide-on-med-and-down ">4%</td>
+                            </tr>
+                            <tr>
+                                <td>EM 2016</td>
+                                <td>0,84</td>
+                                <td>0,79</td>
+                                <td style="background-color:#FFCDD2; ">0,76</td>
+                                <td style="background-color:#C8E6C9; ">1,05</td>
+                                <td class="hide-on-med-and-down ">12%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="card ">
+            <div class="card-content "> <span class="card-title " style="color:black ">Saison 2014/15</span>
+                <table class="bordered highlight ">
+                    <tbody>
+                        <tr>
+                            <th>Platz</th>
+                            <th>Name</th>
+                            <th>Punkte</th>
+                        </tr>
+                        <tr>
+                            <td>1.</td>
+                            <td>Max</td>
+                            <td><b>314</b></td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>Mario</td>
+                            <td><b>283</b></td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>Hans</td>
+                            <td><b>281</b></td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>Franz</td>
+                            <td><b>259,5</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card ">
+            <div class="card-content "><span class="card-title " style="color:black ">Ligen 2014/15 (Punkte/Spiel)</span>
+                <table class="bordered highlight ">
+                    <tbody>
+                        <tr>
+                            <th>Liga</th>
+                            <th>Franz</th>
+                            <th>Hans</th>
+                            <th>Mario</th>
+                            <th>Max</th>
+                            <th class="hide-on-med-and-down ">Anteil</th>
+                        </tr>
+                        <tr>
+                            <td>Deutschland</td>
+                            <td>0,96</td>
+                            <td>0,76</td>
+                            <td style="background-color:#FFCDD2; ">0,67</td>
+                            <td style="background-color:#C8E6C9; ">1,06</td>
+                            <td class="hide-on-med-and-down ">20%</td>
+                        </tr>
+                        <tr>
+                            <td>England</td>
+                            <td style="background-color:#FFCDD2; ">0,65</td>
+                            <td style="background-color:#C8E6C9; ">0,96</td>
+                            <td style="background-color:#FFCDD2; ">0,65</td>
+                            <td>0,73</td>
+                            <td class="hide-on-med-and-down ">8%</td>
+                        </tr>
+                        <tr>
+                            <td>Italien</td>
+                            <td style="background-color:#FFCDD2; ">0,49</td>
+                            <td>1,05</td>
+                            <td style="background-color:#C8E6C9; ">1,1</td>
+                            <td>0,9</td>
+                            <td class="hide-on-med-and-down ">13%</td>
+                        </tr>
+                        <tr>
+                            <td>Österreich</td>
+                            <td style="background-color:#FFCDD2; ">0,5</td>
+                            <td>0,56</td>
+                            <td style="background-color:#C8E6C9; ">1</td>
+                            <td>0,75</td>
+                            <td class="hide-on-med-and-down ">5%</td>
+                        </tr>
+                        <tr>
+                            <td>Spanien</td>
+                            <td style="background-color:#FFCDD2; ">0,67</td>
+                            <td>0,89</td>
+                            <td style="background-color:#C8E6C9; ">1,03</td>
+                            <td>0,94</td>
+                            <td class="hide-on-med-and-down ">6%</td>
+                        </tr>
+                        <tr>
+                            <td>Frankreich</td>
+                            <td style="background-color:#C8E6C9; ">0,92</td>
+                            <td style="background-color:#FFCDD2; ">0,58</td>
+                            <td style="background-color:#FFCDD2; ">0,58</td>
+                            <td style="background-color:#C8E6C9; ">0,92</td>
+                            <td class="hide-on-med-and-down ">4%</td>
+                        </tr>
+                        <tr>
+                            <td>Länderspiel</td>
+                            <td style="background-color:#FFCDD2; ">0,64</td>
+                            <td>0,73</td>
+                            <td style="background-color:#C8E6C9; ">1,23</td>
+                            <td>1,05</td>
+                            <td class="hide-on-med-and-down ">7%</td>
+                        </tr>
+                        <tr>
+                            <td>Europa League</td>
+                            <td style="background-color:#FFCDD2; ">1,03</td>
+                            <td>1,05</td>
+                            <td>1,1</td>
+                            <td style="background-color:#C8E6C9; ">1,33</td>
+                            <td class="hide-on-med-and-down ">9%</td>
+                        </tr>
+                        <tr>
+                            <td>Champions League</td>
+                            <td style="background-color:#C8E6C9; ">1,29</td>
+                            <td>1,26</td>
+                            <td>1,16</td>
+                            <td style="background-color:#FFCDD2; ">1,12</td>
+                            <td class="hide-on-med-and-down ">17%</td>
+                        </tr>
+                        <tr>
+                            <td>Freundschaft</td>
+                            <td style="background-color:#FFCDD2; ">0,07</td>
+                            <td style="background-color:#C8E6C9; ">0,64</td>
+                            <td>0,36</td>
+                            <td style="background-color:#C8E6C9; ">0,64</td>
+                            <td class="hide-on-med-and-down ">5%</td>
+                        </tr>
+                        <tr>
+                            <td>U21 EM</td>
+                            <td style="background-color:#FFCDD2; ">0,36</td>
+                            <td>0,45</td>
+                            <td style="background-color:#C8E6C9; ">0,73</td>
+                            <td>0,55</td>
+                            <td class="hide-on-med-and-down ">4%</td>
+                        </tr>
+                        <tr>
+                            <td>Copa America</td>
+                            <td>2,43</td>
+                            <td>1,43</td>
+                            <td style="background-color:#FFCDD2; ">1,14</td>
+                            <td style="background-color:#C8E6C9; ">2,86</td>
+                            <td class="hide-on-med-and-down ">2%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card ">
+            <div class="card-content "> <span class="card-title " style="color:black ">WM 2014</span>
+                <table class="bordered highlight ">
+                    <tbody>
+                        <tr>
+                            <th>Platz</th>
+                            <th>Name</th>
+                            <th>Punkte</th>
+                        </tr>
+                        <tr>
+                            <td>1.</td>
+                            <td>Max</td>
+                            <td><b>75</b></td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>Mario</td>
+                            <td><b>63</b></td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>Franz</td>
+                            <td><b>58</b></td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>Hans</td>
+                            <td><b>56</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer id="footer " class="page-footer hide-on-med-and-down ">
+    </footer>
+</body>
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js "></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js "></script>
+<script src="/js/materialize.min.js "></script>
+<script src="/js/script.js "></script>
+<script src="/js/isotope.pkgd.min.js "></script>
+
+</html>

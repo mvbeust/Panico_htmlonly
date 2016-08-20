@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html manifest="/manifest.appcache">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tipps anzeigen - Panicotippspiel</title>
+
+    <!--Meta Tags-->
+    <meta name="description" content="Tabelle für das Tippspiel" />
+
+    <!--Dokumente CSS-->
+    <link rel="stylesheet" href="/css/materializenew.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Icons-->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/img/logo.png">
+    <link rel="icon" sizes="228x228" href="/img/logo.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    <link rel="stylesheet" href="/css/animate.min.css">
+    <link href="http://www.panicotippspiel.com/feed" rel="alternate" type="application/rss+xml" title="Panicotippspiel News" />
+
+    <!--Mobile Optimierungen-->
+    <meta id="theme-color" name="theme-color" content="#3f51b5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Tippspiel">
+    <meta name="application-name" content="Tippspiel" />
+    <script src="/js/stay_standalone.js" type="text/javascript"></script>
+
+    <!--MS Optimizations-->
+    <meta name="msapplication-TileImage" content="/logo.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+</head>
+
+<body onload="TippsPageBuilder()">
+    <header id="navigation"></header>
+    <main class="container">
+        <div class="row" id="futureGames">
+        </div>
+        <div class="row" id="pastGames">
+          <div class="card col s12 m6" style="background-color:#fff">
+              <div class="card-content"><span class="badge"><img src="https://images.onefootball.com/icons/leagueColoredCompetition/64/1.png" alt="Bundesliga" class="responsive-img" style="height:30px"></span>
+                  <p style="font-size:larger; font-weight:bold"><img src="https://images.onefootball.com/icons/teams/56/171.png" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;">Mannschaft 1</p>
+                  <p style="font-size:larger; font-weight:bold"><img src="https://images.onefootball.com/icons/teams/56/144.png" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;">Mannschaft 2</p>
+                  <p style="font-size:smaller; font-weight:inherit; color:#999">Bundesliga Normal Spiel am 8/25/2016 um 10:00:00 AM Uhr</p>
+                  <div class="divider" style="margin-bottom: 2px;"></div>
+                  <p class="center" style="font-size:larger; font-weight:bold">2:1</p>
+                  <p class="center" style="font-size:smaller; font-weight:inherit;">Mannschaft 1 (90 mins) (120 mins) (11er)</p>
+
+                  <table class="centered">
+                      <thead>
+                          <tr>
+                              <th>Franz</th>
+                              <th>Hans</th>
+                              <th>Mario</th>
+                              <th>Max</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>2:1</td>
+                              <td>2:1</td>
+                              <td>0:3</td>
+                              <td>1:1</td>
+                          </tr>
+                          <tr>
+                              <td>90 mins</td>
+                              <td>120 mins</td>
+                              <td>90 mins</td>
+                              <td>11er</td>
+                          </tr>
+                          <tr>
+                              <td>Mannsc</td>
+                              <td>Mannsc</td>
+                              <td>Mannsc</td>
+                              <td>Mannsc</td>
+                          </tr>
+                          <tr style="border-top: 1px solid #d0d0d0">
+                              <td>+2</td>
+                              <td>+3</td>
+                              <td>+4</td>
+                              <td>-1</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+    </main>
+    <footer id="footer" class="page-footer hide-on-med-and-down">
+    </footer>
+</body>
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="/js/materialize.min.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/isotope.pkgd.min.js"></script>
+
+</html>
