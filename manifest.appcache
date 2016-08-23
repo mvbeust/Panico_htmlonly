@@ -3,6 +3,7 @@ CACHE MANIFEST
 
 # Explicitly cached entries
 /css/materializenew.min.css
+/js/script.js
 
 # offline.html will be displayed if the user is offline
 FALLBACK:
@@ -16,14 +17,21 @@ NETWORK:
 # Additional resources to cache
 CACHE:
 /css/animate.min.css
-/js/script.js
+
 /js/jquery.min.js
 /js/firebase.js
 /js/stay_standalone.js
 /js/materialize.min.js
 /js/isotope.pkgd.min.js
+/js/jquery.min.js
+
 /inc/navigation.html
 /inc/footer.html
+/faq/index.html
+/archiv/index.html
+/tabelle/index.html
+/tipps/index.html
+
 /img/materializecss.png
 /img/rss.png
 /img/twitter.png
@@ -32,5 +40,3 @@ CACHE:
 /img/logonav.png
 favicon.ico
 /fonts/*
-/faq/index.html
-/js/jquery.min.js

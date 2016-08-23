@@ -29,7 +29,7 @@
     <meta name="msapplication-TileColor" content="#3f51b5">
 </head>
 
-<body>
+<body onload="OfflinePageBuilder()">
     <header id="navigation">
         <!--Navigation-->
         <div class="navbar-fixed">
@@ -41,11 +41,24 @@
         </div>
     </header>
     <main class="container">
-        <p>This site is offline</p>
+        <div class="row" style="margin-bottom:0px">
+            <div class="col s12">
+                <a href="/">
+                    <div class="card red">
+                        <div class="card-content center white-text" style="padding:10px">
+                            Wieder online gehen
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row grid" id="pastGames">
+        </div>
     </main>
 </body>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/materialize.min.js"></script>
 <script src="/js/script.js"></script>
+<script src="/js/isotope.pkgd.min.js"></script>
 
 </html>
