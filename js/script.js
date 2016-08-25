@@ -72,11 +72,15 @@ function AddGamesPageBuilder() {
 
 function OfflinePageBuilder() {
     $("#footer").load('/inc/footer.html');
+    futurecards = localStorage.getItem('futuregames');
+    futuregamesdiv = document.getElementById('futureGames');
+    futuregamesdiv.innerHTML = futurecards;
     cards = localStorage.getItem('pastgames');
     pastgamesdiv = document.getElementById('pastGames');
     pastgamesdiv.innerHTML = cards;
     makeReady();
-    callMasonry('grid','grid-item');
+    callMasonry('grid1','grid-item');
+    callMasonry('grid2','grid-item');
 }
 
 function ArchivPageBuilder() {
@@ -251,7 +255,7 @@ function editGames(allGames, ID) {
     document.getElementById('timestamp').value = new Date(allGames[ID].timestamp).toString();
     var timeID = ID.substr(0, 13);
     timeID = parseInt(timeID);
-    document.getElementById('oldtimestamp').value = new Date(timeID).toString();
+    document.getElementById('oldtimestamp').value = ID;
     document.getElementById('bonuspunkte').value = allGames[ID].bonuspunkte;
     document.getElementById('land').value = allGames[ID].land;
     document.getElementById('length').value = editLength;
@@ -284,12 +288,11 @@ function submitNewGame() {
     length = lengthvalues;
 
     //Create Identification for Object in DB and create timestamp
-    oldtimestamp = Date.parse(oldtimestamp);
     datevalue = Date.parse(timestamp);
     //Check if a game is edited or a new game is created
-    if (oldtimestamp > 1) {
+    if (oldtimestamp) {
         console.log("Editing existing game");
-        var identification = oldtimestamp.toString() + mannschaft1.replace(/\W+/g, '') + mannschaft2.replace(/\W+/g, '');
+        var identification = oldtimestamp;
     } else {
         var identification = datevalue.toString() + mannschaft1.replace(/\W+/g, '') + mannschaft2.replace(/\W+/g, '');
     }
@@ -318,6 +321,10 @@ function deleteGame(ID) {
     //Delete Game on AddGames Page
     dbRefRemoveLine = firebase.database().ref('spiele/' + ID);
     dbRefRemoveLine.remove();
+}
+
+function changeBonusPoints(){
+
 }
 
 
@@ -368,12 +375,18 @@ function createformTippen(CurrentGames, CurrentTime) {
                 }
             }
             namePlayerTipps = namePlayerTipps.substring(0, namePlayerTipps.length - 2);
+            fortschritt = item['fortschritt'];
+            if(fortschritt == "Normal"){
+              fortschritt = "";
+            }else if(fortschritt.slice(-1) == "e"){
+              fortschritt = fortschritt.substring(0, fortschritt.length - 1)
+            }
             //card is opened
             cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
             cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
-            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + new Date(item['timestamp']).toLocaleDateString() + ' um ' + new Date(item['timestamp']).toLocaleTimeString() + ' Uhr</p>';
+            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + ' ' + moment(new Date(item['timestamp'])).fromNow() + '</p>';
             if (countTipps != countPlayers) {
                 m1 = item['mannschaft1'];
                 m2 = item['mannschaft2'];
@@ -412,8 +425,13 @@ function createformTippen(CurrentGames, CurrentTime) {
             printedCards += 1;
         }
         cards += '</div>'
+        if (printedCards < 1){
+          cards = '<div class="row">';
+          cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >Keine Spiele  zu tippen </div></div></div>';
+          cards += '</div>';
+          document.getElementById('submitbutton').className += ' disabled';
+        }
         formTippen.innerHTML = cards;
-        console.log(printedCards);
         makeReady();
         callMasonry();
     })
@@ -429,9 +447,7 @@ function submitTipps(CurrentGames) {
         var entries = {};
         for (var i in CurrentGames) {
             countloops += 1;
-            console.log(i);
             abgabeZeit = Math.floor(Date.now());
-            console.log($('#' + i + 'M1').length);
             if ($('#' + i + 'M1').length && (abgabeZeit <= CurrentGames[i]['timestamp'])) {
                 //Es wird kontrolliert, ob ein Spiel rechtzeitig getippt worden ist
                 //For every possible game that has been displayed the values are fetched
@@ -469,9 +485,6 @@ function submitTipps(CurrentGames) {
                             }
                         }
                     };
-                    //Send Object to DB
-                    console.log(newEntry);
-                    //console.log(countloops);
                 }
             }
         }
@@ -835,6 +848,7 @@ function pastGamesBuilder(pastGamesDB) {
     var sortedTimes = sortingReverseObject('timestamp', pastGamesDB);
     var pastGamesArray = [];
     var countPlayers = 0;
+    var printedCards = 0;
     dbScores = firebase.database().ref().child('scores');
     dbResources = firebase.database().ref().child('resources');
     cards = '';
@@ -917,7 +931,7 @@ function pastGamesBuilder(pastGamesDB) {
                         cards += '<tr>' + pointsPlayersLine + '</tr>';
                         cards += '</tbody></table>';
 
-
+                        printedCards += 1;
                         cards += '</div></div></div>';
                         pastGames.innerHTML = cards;
                         localStorage.setItem('pastgames',cards);
@@ -926,6 +940,10 @@ function pastGamesBuilder(pastGamesDB) {
                 callMasonry('grid2','grid-item');
             });
         });
+        if (printedCards < 1){
+          cards = '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >Keine alten Tipps anzuzeigen</div></div></div>';
+            pastGames.innerHTML = cards;
+        }
     });
 }
 
@@ -1134,4 +1152,119 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+
+//////Google Sheets support
+
+function getResources(){
+  var config = {
+      apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
+      authDomain: "project-985851437142041413.firebaseapp.com",
+      databaseURL: "https://project-985851437142041413.firebaseio.com",
+      storageBucket: "project-985851437142041413.appspot.com",
+  };
+  firebase.initializeApp(config);
+
+  dbResources = firebase.database().ref('resources/land');
+  dbResources.on('value', function(snapshot) {
+      dbResources = snapshot.val();
+      html = "";
+      for (var j in dbResources){
+        html += j + '<br>';
+      }
+      document.getElementById('ausgabe').innerHTML = html;
+      });
+}
+
+function importJSON() {
+    var config = {
+        apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
+        authDomain: "project-985851437142041413.firebaseapp.com",
+        databaseURL: "https://project-985851437142041413.firebaseio.com",
+        storageBucket: "project-985851437142041413.appspot.com",
+    };
+    firebase.initializeApp(config);
+    dbRefSpiele = firebase.database().ref().child('spiele');
+    entries = {};
+    entries["1472669100000DeutschlandFinnland"] = {
+        "art": "Spiel",
+        "bonuspunkte": 0,
+        "fortschritt": "Normal",
+        "land": "International",
+        "length": {
+            "90": "90"
+        },
+        "mannschaft1": "Deutschland",
+        "mannschaft2": "Finnland",
+        "timestamp": 1472669100000,
+        "wettbewerb": "Freundschaft"
+    };
+    entries["1472755500000BelgienSpanien"] = {
+        "art": "Spiel",
+        "bonuspunkte": 0,
+        "fortschritt": "Normal",
+        "land": "International",
+        "length": {
+            "90": "90"
+        },
+        "mannschaft1": "Belgien",
+        "mannschaft2": "Spanien",
+        "timestamp": 1472755500000,
+        "wettbewerb": "Freundschaft"
+    };
+    entries["1472755500000ItalienFrankreich"] = {
+        "art": "Spiel",
+        "bonuspunkte": 0,
+        "fortschritt": "Normal",
+        "land": "International",
+        "length": {
+            "90": "90"
+        },
+        "mannschaft1": "Italien",
+        "mannschaft2": "Frankreich",
+        "timestamp": 1472755500000,
+        "wettbewerb": "Freundschaft"
+    };
+    entries["1473014700000NorwegenDeutschland"] = {
+        "art": "Spiel",
+        "bonuspunkte": 0,
+        "fortschritt": "Normal",
+        "land": "International",
+        "length": {
+            "90": "90"
+        },
+        "mannschaft1": "Norwegen",
+        "mannschaft2": "Deutschland",
+        "timestamp": 1473014700000,
+        "wettbewerb": "WM Qualifikation"
+    };
+    entries["1473101100000IsraelItalien"] = {
+        "art": "Spiel",
+        "bonuspunkte": 0,
+        "fortschritt": "Normal",
+        "land": "International",
+        "length": {
+            "90": "90"
+        },
+        "mannschaft1": "Israel",
+        "mannschaft2": "Italien",
+        "timestamp": 1473101100000,
+        "wettbewerb": "WM Qualifikation"
+    };
+    entries["1473187500000SchweizPortugal"] = {
+        "art": "Spiel",
+        "bonuspunkte": 0,
+        "fortschritt": "Normal",
+        "land": "International",
+        "length": {
+            "90": "90"
+        },
+        "mannschaft1": "Schweiz",
+        "mannschaft2": "Portugal",
+        "timestamp": 1473187500000,
+        "wettbewerb": "WM Qualifikation"
+    };
+    console.log(entries);
+    dbRefSpiele.update(entries);
 }
