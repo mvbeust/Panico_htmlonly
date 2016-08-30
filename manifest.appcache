@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 19-08-2016: v1.002
+# 30-08-2016: v1.003
 
 # Explicitly cached entries
 /css/materializenew.min.css
@@ -24,6 +24,8 @@ CACHE:
 /js/materialize.min.js
 /js/isotope.pkgd.min.js
 /js/jquery.min.js
+/js/moment.min.js
+/js/de.js
 
 /inc/navigation.html
 /inc/footer.html

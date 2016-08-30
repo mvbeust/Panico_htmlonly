@@ -337,6 +337,7 @@ function createformTippen(CurrentGames, CurrentTime) {
         "length": "select",
         "winner": "select"
     }
+    millisecs = 60000;
     dbWettbewerb = firebase.database().ref();
     dbWettbewerb.on('value', function(snapshot) {
         dbPlayers = snapshot.child('players').val();
@@ -367,6 +368,9 @@ function createformTippen(CurrentGames, CurrentTime) {
             var item = CurrentGames[useID];
             var countTipps = 0;
             var namePlayerTipps = "";
+            if (item['timestamp'] > CurrentTime + 14400 *  millisecs){
+              continue;
+            }
             for (j in dbPlayers) {
                 //Checking if every player has submitted a tipp
                 if (dbPlayers[j][useID]) {
@@ -386,7 +390,7 @@ function createformTippen(CurrentGames, CurrentTime) {
             cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
-            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + ' ' + moment(new Date(item['timestamp'])).fromNow() + '</p>';
+            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="'+moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
             if (countTipps != countPlayers) {
                 m1 = item['mannschaft1'];
                 m2 = item['mannschaft2'];
@@ -586,6 +590,7 @@ function createformErgebnis(ErgebnisGames, CurrentTime) {
 
 function submitErgebnis(ErgebnisGames) {
     var successSubmits = 0;
+    var entries = {};
     for (var i in ErgebnisGames) {
         if ($('#' + i + 'M1').length) {
             //For every possible game that has been displayed the values are fetched
@@ -616,7 +621,6 @@ function submitErgebnis(ErgebnisGames) {
                     calcPoints(i, scoreM1, scoreM2);
                 }
                 newEntry += '}';
-                var newEntry = jQuery.parseJSON(newEntry);
                 var newTipp = jQuery.parseJSON(newEntry);
                 entries[i] = newTipp;
                 successSubmits += 1;
@@ -628,7 +632,6 @@ function submitErgebnis(ErgebnisGames) {
                         console.log('Synchronization failed');
                         displayToast("Serverfehler", "red");
                     } else {
-                        successSubmits += 1;
                         console.log('Synchronization succeeded');
                         if (successSubmits == 1) {
                             document.getElementById('toast').innerHTML = successSubmits + ' Ergebnis eingetragen';
@@ -876,21 +879,29 @@ function pastGamesBuilder(pastGamesDB) {
                     var lengthPlayersLine = "";
                     var winnerPlayersLine = "";
                     var pointsPlayersLine = "";
+                    var nonTippAdded = false;
                     for (j in dbPlayers) {
                         //Checking if every player has submitted a tipp
                         if (dbPlayers[j][useID]) {
                             countTipps += 1;
                             //create playersline for table
                             namePlayersLine += "<th>" + j + "</th>";
-                            tippPlayersLine += '<td>' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM1 + '</td>';
+                            tippPlayersLine += '<td>' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
                             if (dbPlayers[j][useID].length == "") {
                                 lengthPlayersLine += '<td style="font-size:smaller;">Non-Tipp</td>';
+                                nonTippAdded = true;
                             } else {
                                 lengthPlayersLine += '<td>' + dbPlayers[j][useID].length + '</td>';
                             }
                             winnerPlayersLine += '<td style="font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
                             n = dbPlayers[j][useID].totalpoints;
-                            pointsPlayersLine += '<td  style="border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + '</td>';
+
+                            if (nonTippAdded == false && dbPlayers[j][useID].nontipp) {
+                                nontippInfo = " (NT)";
+                            } else {
+                                nontippInfo = "";
+                            }
+                            pointsPlayersLine += '<td  style="border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
                         }
                     }
                     namePlayersLine += "</thead></tr>";
@@ -900,8 +911,10 @@ function pastGamesBuilder(pastGamesDB) {
                         cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
                         cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
                         cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
-                        cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + new Date(item['timestamp']).toLocaleDateString() + ' um ' + new Date(item['timestamp']).toLocaleTimeString() + ' Uhr</p>';
+                        cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + moment(new Date(item['timestamp'])).format('LLLL')  + ' Uhr</p>';
+                        finalscores = false;
                         if (dbScores[useID]) {
+                            finalscores = true;
                             //Checks if there already are final scores for the game
                             cards += '<div class="divider" style="margin-bottom: 2px;"></div>';
                             cards += '<p class="center" style="font-size:larger; font-weight:bold">' + dbScores[useID].scoreM1 + ':' + dbScores[useID].scoreM2 + '</p>';
@@ -928,125 +941,127 @@ function pastGamesBuilder(pastGamesDB) {
                             cards += '<tr>' + lengthPlayersLine + '</tr>';
                             cards += '<tr>' + winnerPlayersLine + '</tr>';
                         }
-                        cards += '<tr>' + pointsPlayersLine + '</tr>';
+                        if (finalscores) {
+                            cards += '<tr>' + pointsPlayersLine + '</tr>';
+                        }
                         cards += '</tbody></table>';
 
                         printedCards += 1;
                         cards += '</div></div></div>';
                         pastGames.innerHTML = cards;
-                        localStorage.setItem('pastgames',cards);
+                        localStorage.setItem('pastgames', cards);
                     }
                 }
-                callMasonry('grid2','grid-item');
+                callMasonry('grid2', 'grid-item');
+                if (printedCards < 1) {
+                    cards = '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >Keine alten Tipps anzuzeigen</div></div></div>';
+                    pastGames.innerHTML = cards;
+                }
             });
         });
-        if (printedCards < 1){
-          cards = '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >Keine alten Tipps anzuzeigen</div></div></div>';
-            pastGames.innerHTML = cards;
-        }
     });
 }
 
-function futureGamesBuilder(futureGamesDB, CurrentTime){
-  var sortedTimes = sortingObject('timestamp', futureGamesDB);
-  var pastGamesArray = [];
-  var countPlayers = 0;
-  dbScores = firebase.database().ref().child('scores');
-  dbResources = firebase.database().ref().child('resources');
-  futurecards = '';
-  dbResources.once('value').then(function(snapshot) {
-      dbWettbewerb = snapshot.child('wettbewerb').val();
-      dbMannschaft = snapshot.child('mannschaft').val();
-      dbScores.on('value', function(snapshot) {
-          dbScores = snapshot.val();
-          dbPlayers = firebase.database().ref().child('players');
-          dbPlayers.on('value', function(snapshot) {
-              dbPlayers = snapshot.val();
-              for (var p in dbPlayers) {
-                  //Counting number of players
-                  countPlayers += 1;
-              }
+function futureGamesBuilder(futureGamesDB, CurrentTime) {
+    var sortedTimes = sortingObject('timestamp', futureGamesDB);
+    var pastGamesArray = [];
+    var countPlayers = 0;
+    dbScores = firebase.database().ref().child('scores');
+    dbResources = firebase.database().ref().child('resources');
+    futurecards = '';
+    dbResources.once('value').then(function(snapshot) {
+        dbWettbewerb = snapshot.child('wettbewerb').val();
+        dbMannschaft = snapshot.child('mannschaft').val();
+        dbScores.on('value', function(snapshot) {
+            dbScores = snapshot.val();
+            dbPlayers = firebase.database().ref().child('players');
+            dbPlayers.on('value', function(snapshot) {
+                dbPlayers = snapshot.val();
+                for (var p in dbPlayers) {
+                    //Counting number of players
+                    countPlayers += 1;
+                }
 
-              for (var i = 0; i < sortedTimes.length; i++) {
-                  //Looping through all games
-                  //Defining all Variabeles
-                  var useID = sortedTimes[i].key;
-                  var item = futureGamesDB[useID];
-                  var countTipps = 0;
-                  var namePlayersLine = "<thead><tr>";
-                  var tippPlayersLine = "";
-                  var lengthPlayersLine = "";
-                  var winnerPlayersLine = "";
-                  var pointsPlayersLine = "";
-                  for (j in dbPlayers) {
-                      //Checking if every player has submitted a tipp
-                      if (dbPlayers[j][useID]) {
-                          countTipps += 1;
-                          //create playersline for table
-                          namePlayersLine += "<th>" + j + "</th>";
-                          tippPlayersLine += '<td>' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM1 + '</td>';
-                          if (dbPlayers[j][useID].length == "") {
-                              lengthPlayersLine += '<td style="font-size:smaller;">Non-Tipp</td>';
-                          } else {
-                              lengthPlayersLine += '<td>' + dbPlayers[j][useID].length + '</td>';
-                          }
-                          winnerPlayersLine += '<td style="font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
-                          n = dbPlayers[j][useID].totalpoints;
-                          pointsPlayersLine += '<td  style="border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + '</td>';
-                      }
-                  }
-                  namePlayersLine += "</thead></tr>";
-                  if (countTipps == countPlayers || CurrentTime > item['timestamp']) {
-                      //Checks if every player has submitted a tipp and then proceeds to create card
-                      futurecards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
-                      futurecards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
-                      futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
-                      futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
-                      futurecards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + new Date(item['timestamp']).toLocaleDateString() + ' um ' + new Date(item['timestamp']).toLocaleTimeString() + ' Uhr</p>';
-                      finalscores = false;
-                      if (dbScores[useID]) {
-                          //Checks if there already are final scores for the game
-                          finalscores = true;
-                          futurecards += '<div class="divider" style="margin-bottom: 2px;"></div>';
-                          futurecards += '<p class="center" style="font-size:larger; font-weight:bold">' + dbScores[useID].scoreM1 + ':' + dbScores[useID].scoreM2 + '</p>';
-                          if (dbScores[useID].length) {
-                              if (dbScores[useID].length == "11er") {
-                                  displayLength = '(11er)';
-                              } else {
-                                  displayLength = '(' + dbScores[useID].length + ' mins)';
-                              }
-                              futurecards += '<p class="center" style="font-size:smaller; font-weight:inherit;">' + dbScores[useID].winner + ' ' + displayLength + '</p>';
-                          }
-                      }
-                      futurecards += '<table class="centered" style="table-layout:fixed">';
-                      futurecards += namePlayersLine;
-                      futurecards += '<tbody>';
-                      futurecards += '<tr>' + tippPlayersLine + '</tr>';
-                      //Check if additional information (length, winner) has to be displayed
-                      length = item['length'];
-                      var lengthNeeded = 0;
-                      for (var t in length) {
-                          lengthNeeded += 1;
-                      }
-                      if (lengthNeeded > 1) {
-                          futurecards += '<tr>' + lengthPlayersLine + '</tr>';
-                          futurecards += '<tr>' + winnerPlayersLine + '</tr>';
-                      }
-                      if(finalscores){
-                      futurecards += '<tr>' + pointsPlayersLine + '</tr>';
+                for (var i = 0; i < sortedTimes.length; i++) {
+                    //Looping through all games
+                    //Defining all Variabeles
+                    var useID = sortedTimes[i].key;
+                    var item = futureGamesDB[useID];
+                    var countTipps = 0;
+                    var namePlayersLine = "<thead><tr>";
+                    var tippPlayersLine = "";
+                    var lengthPlayersLine = "";
+                    var winnerPlayersLine = "";
+                    var pointsPlayersLine = "";
+                    for (j in dbPlayers) {
+                        //Checking if every player has submitted a tipp
+                        if (dbPlayers[j][useID]) {
+                            countTipps += 1;
+                            //create playersline for table
+                            namePlayersLine += "<th>" + j + "</th>";
+                            tippPlayersLine += '<td>' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
+                            if (dbPlayers[j][useID].length == "") {
+                                lengthPlayersLine += '<td style="font-size:smaller;">Non-Tipp</td>';
+                            } else {
+                                lengthPlayersLine += '<td>' + dbPlayers[j][useID].length + '</td>';
+                            }
+                            winnerPlayersLine += '<td style="font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
+                            n = dbPlayers[j][useID].totalpoints;
+                            pointsPlayersLine += '<td  style="border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + '</td>';
+                        }
                     }
-                      futurecards += '</tbody></table>';
+                    namePlayersLine += "</thead></tr>";
+                    if (countTipps == countPlayers || CurrentTime > item['timestamp']) {
+                        //Checks if every player has submitted a tipp and then proceeds to create card
+                        futurecards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
+                        futurecards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
+                        futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
+                        futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
+                        futurecards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art']  + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="'+moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
+                        finalscores = false;
+                        if (dbScores[useID]) {
+                            //Checks if there already are final scores for the game
+                            finalscores = true;
+                            futurecards += '<div class="divider" style="margin-bottom: 2px;"></div>';
+                            futurecards += '<p class="center" style="font-size:larger; font-weight:bold">' + dbScores[useID].scoreM1 + ':' + dbScores[useID].scoreM2 + '</p>';
+                            if (dbScores[useID].length) {
+                                if (dbScores[useID].length == "11er") {
+                                    displayLength = '(11er)';
+                                } else {
+                                    displayLength = '(' + dbScores[useID].length + ' mins)';
+                                }
+                                futurecards += '<p class="center" style="font-size:smaller; font-weight:inherit;">' + dbScores[useID].winner + ' ' + displayLength + '</p>';
+                            }
+                        }
+                        futurecards += '<table class="centered" style="table-layout:fixed">';
+                        futurecards += namePlayersLine;
+                        futurecards += '<tbody>';
+                        futurecards += '<tr>' + tippPlayersLine + '</tr>';
+                        //Check if additional information (length, winner) has to be displayed
+                        length = item['length'];
+                        var lengthNeeded = 0;
+                        for (var t in length) {
+                            lengthNeeded += 1;
+                        }
+                        if (lengthNeeded > 1) {
+                            futurecards += '<tr>' + lengthPlayersLine + '</tr>';
+                            futurecards += '<tr>' + winnerPlayersLine + '</tr>';
+                        }
+                        if (finalscores) {
+                            futurecards += '<tr>' + pointsPlayersLine + '</tr>';
+                        }
+                        futurecards += '</tbody></table>';
 
 
-                      futurecards += '</div></div></div>';
-                      futureGames.innerHTML = futurecards;
-                      localStorage.setItem('futuregames',futurecards);
-                  }
-              }
-              callMasonry('grid1');
-          });
-      });
-  });
+                        futurecards += '</div></div></div>';
+                        futureGames.innerHTML = futurecards;
+                        localStorage.setItem('futuregames', futurecards);
+                    }
+                }
+                callMasonry('grid1');
+            });
+        });
+    });
 }
 
 
@@ -1130,6 +1145,7 @@ function callMasonry(grid, item, mode) {
         itemSelector: item,
         layoutMode: mode
     });
+    $('.tooltipped').tooltip({delay: 50});
 }
 
 function setCookie(cname, cvalue, exdays) {
@@ -1166,7 +1182,7 @@ function getResources(){
   };
   firebase.initializeApp(config);
 
-  dbResources = firebase.database().ref('resources/land');
+  dbResources = firebase.database().ref('resources/mannschaft');
   dbResources.on('value', function(snapshot) {
       dbResources = snapshot.val();
       html = "";
