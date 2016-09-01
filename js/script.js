@@ -22,7 +22,7 @@ function TippenPageBuilder() {
             createformTippen(CurrentGames, CurrentTime)
         });
     } else {
-      window.location = "/offline.html";
+        window.location = "/offline.html";
     }
     makeReady();
 }
@@ -79,8 +79,8 @@ function OfflinePageBuilder() {
     pastgamesdiv = document.getElementById('pastGames');
     pastgamesdiv.innerHTML = cards;
     makeReady();
-    callMasonry('grid1','grid-item');
-    callMasonry('grid2','grid-item');
+    callMasonry('grid1', 'grid-item');
+    callMasonry('grid2', 'grid-item');
 }
 
 function ArchivPageBuilder() {
@@ -323,7 +323,7 @@ function deleteGame(ID) {
     dbRefRemoveLine.remove();
 }
 
-function changeBonusPoints(){
+function changeBonusPoints() {
 
 }
 
@@ -368,8 +368,8 @@ function createformTippen(CurrentGames, CurrentTime) {
             var item = CurrentGames[useID];
             var countTipps = 0;
             var namePlayerTipps = "";
-            if (item['timestamp'] > CurrentTime + 14400 *  millisecs){
-              continue;
+            if (item['timestamp'] > CurrentTime + 14400 * millisecs) {
+                continue;
             }
             for (j in dbPlayers) {
                 //Checking if every player has submitted a tipp
@@ -380,25 +380,25 @@ function createformTippen(CurrentGames, CurrentTime) {
             }
             namePlayerTipps = namePlayerTipps.substring(0, namePlayerTipps.length - 2);
             fortschritt = item['fortschritt'];
-            if(fortschritt == "Normal"){
-              fortschritt = "";
-            }else if(fortschritt.slice(-1) == "e"){
-              fortschritt = fortschritt.substring(0, fortschritt.length - 1)
+            if (fortschritt == "Normal") {
+                fortschritt = "";
+            } else if (fortschritt.slice(-1) == "e") {
+                fortschritt = fortschritt.substring(0, fortschritt.length - 1)
             }
             //card is opened
             cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
             cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
-            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="'+moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
+            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
             if (countTipps != countPlayers) {
                 m1 = item['mannschaft1'];
                 m2 = item['mannschaft2'];
-                transuseID = "'"+useID+"'";
-                transm1 = "'"+m1+"'";
-                transm2 = "'"+m2+"'";
-                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M1" type="number" class="validate" onchange="changeWinnerSelect('+transuseID+','+transm1+','+transm2+')"><label for="' + useID + 'M1">Heim</label></div>';
-                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M2" type="number" class="validate" onchange="changeWinnerSelect('+transuseID+','+transm1+','+transm2+')"><label for="' + useID + 'M2">Gast</label></div>';
+                transuseID = "'" + useID + "'";
+                transm1 = "'" + m1 + "'";
+                transm2 = "'" + m2 + "'";
+                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M1" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ')"><label for="' + useID + 'M1">Heim</label></div>';
+                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M2" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ')"><label for="' + useID + 'M2">Gast</label></div>';
                 //Optionen für Länge werden erstellt
                 length = item['length'];
                 var lengthPrint = '';
@@ -429,11 +429,11 @@ function createformTippen(CurrentGames, CurrentTime) {
             printedCards += 1;
         }
         cards += '</div>'
-        if (printedCards < 1){
-          cards = '<div class="row">';
-          cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >Keine Spiele  zu tippen </div></div></div>';
-          cards += '</div>';
-          document.getElementById('submitbutton').className += ' disabled';
+        if (printedCards < 1) {
+            cards = '<div class="row">';
+            cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >Keine Spiele  zu tippen </div></div></div>';
+            cards += '</div>';
+            document.getElementById('submitbutton').className += ' disabled';
         }
         formTippen.innerHTML = cards;
         makeReady();
@@ -504,17 +504,17 @@ function changeWinnerSelect(useID, m1, m2) {
     var winnerSelect = document.getElementById(useID + "Winner");
     console.log(m1);
     if (winnerSelect) {
-      //Check if a Winner actually has to be selected
+        //Check if a Winner actually has to be selected
         scoreMannschaft1 = document.getElementById(useID + 'M1').value;
         scoreMannschaft2 = document.getElementById(useID + 'M2').value;
         if (scoreMannschaft1 && scoreMannschaft2) {
-          //Check if there are scores are entred for both teams before comparison is  started
+            //Check if there are scores are entred for both teams before comparison is  started
             if (scoreMannschaft1 > scoreMannschaft2) {
                 winnerSelect.value = m1;
             } else if (scoreMannschaft1 < scoreMannschaft2) {
                 winnerSelect.value = m2;
             }
-            $('#'+useID + 'Winner').material_select();
+            $('#' + useID + 'Winner').material_select();
         }
     }
 }
@@ -794,12 +794,195 @@ function calcPointsSpecial(submittedGameID, scoreM1, scoreM2, length, winner, bo
 
 //////Build Table Functions
 function tabelleBuilder(allPlayersScores) {
+    //Calc Table for current Month
+    month = 1;
+    monthTable(allPlayersScores, month);
+    if (new Date() > new Date("2016-09-01")) {
+        //Calc Table for last month
+        month = 0;
+        monthTable(allPlayersScores, month);
+    }
+}
+
+function monthTable(allPlayersScores, month) {
+  //This function requests all games that are in a specified month
+  //Labels for months are created
+  monthLabels = [0, "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  if(new Date() > new Date("2017-08-15")){
+    //This is a check that checks if the Season has ended
+    return;
+  }
+  //get all games that are in the specified month
+  currentMonth = new Date().getMonth() + month;
+  //label the specified month
+  label = monthLabels[currentMonth];
+  if (currentMonth < 10) {
+      currentMonth = "0" + currentMonth;
+  }
+  currentMonth = new Date("2016-" + currentMonth + "-01T00:00:00");
+  //get first and late point in time of specified month
+  currentMonth = monthStartEnd(currentMonth);
+
+  //Request all games in the specified month
+  dbRefCurrentMonthGames = firebase.database().ref().child('spiele');
+  dbRefCurrentMonthGames = dbRefCurrentMonthGames.orderByChild('timestamp');
+  dbRefCurrentMonthGames = dbRefCurrentMonthGames.startAt(currentMonth[0]).endAt(currentMonth[1]);
+
+  dbRefCurrentMonthGames.on('value', function(snapshot) {
+      CurrentMonthGames = snapshot.val();
+      calcMonthPoints(CurrentMonthGames, allPlayersScores, label);
+  });
+
+  dbPanicoTable = firebase.database().ref('table').child('panico');
+  dbPanicoTable.on('value', function(snapshot) {
+      dbPanicoTable = snapshot.val();
+      panicoHTML(allPlayersScores, dbPanicoTable);
+  });
+}
+
+function calcMonthPoints(CurrentMonthGames, allPlayersScores, label) {
+  //This function calculates the points of every player in every month and submits them to the database
+    var table = {};
+    for (var p in allPlayersScores) {
+        //Looping over all Players
+        var singlePlayerScores = allPlayersScores[p];
+        var singlePlayerPoints = 0;
+        for (var s in CurrentMonthGames) {
+            //Looping over all games for every player
+            if (singlePlayerScores[s]) {
+                if (singlePlayerScores[s]['totalpoints'] > 0 || singlePlayerScores[s]['totalpoints'] < 0) {
+                    //Check if game was already played & the player has received points and then sum up all points
+                    singlePlayerPoints += singlePlayerScores[s]['totalpoints'];
+                }
+            }
+        }
+        //Push player and points to object (points are named timestamp just to used the same ordering function and are negative to reverse sorting)
+        table[p] = -singlePlayerPoints;
+    }
+    //Update specified montly table in database
+    dbRefTable = firebase.database().ref('table/month/' + label);
+    dbRefTable.update(table);
+    createSubtables();
+}
+
+function createSubtables() {
+  //This function displays the monthly tables of all months in the database and calls a panico calculation
+    sortedMonths = ["Juli", "Juni", "Mai", "April", "März", "Februar", "Januar", "Dezember", "November", "Oktober", "September", "August"];
+    panicoPunkte = {
+        "Juli": 12,
+        "Juni": 11,
+        "Mai": 10,
+        "April": 9,
+        "März": 8,
+        "Februar": 7,
+        "Januar": 6,
+        "Dezember": 5,
+        "November": 4,
+        "Oktober": 3,
+        "September": 2,
+        "August": 1
+    };
+    dbRefTable = firebase.database().ref('table/month');
+    dbRefTable.on('value', function(snapshot) {
+        subtables = snapshot.val();
+        monthlytableHTML = '';
+        monthNumber = 0;
+        var entry = {};
+        monthlytableHTML += ' <ul class="collapsible" data-collapsible="expandable" style="background-color:#eeeeee">';
+        for (i in sortedMonths) {
+            //A loop is created over all months (in the right order for the game)
+            singleSubtable = subtables[sortedMonths[i]]; //Every month is isolated
+            if (subtables[sortedMonths[i]]) {
+                monthNumber += 1; //Is a month is in the database a new month is counted
+                var monthtable = [];
+                for (p in singleSubtable) {
+                    //The Data for every player is entered into an array
+                    monthtable.push({
+                        name: p,
+                        timestamp: singleSubtable[p]
+                    })
+
+                }
+
+                //Sorting table
+                var sortedTable = sortingObject('timestamp', monthtable);
+                if (monthNumber == 1) {
+                    //Special HTML formatting for curent month
+                    monthlytableHTML += '<li><div class="collapsible-header active" style="font-weight: bold"><i class="material-icons">today</i>' + sortedMonths[i] + ' (+' + panicoPunkte[sortedMonths[i]] + ')</div> <div class="collapsible-body" style="padding: 20px; margin: 0px; display: block; background-color:#f5f5f5"> <table class="bordered highlight"> <tbody>';
+                } else {
+                    monthlytableHTML += '<li><div class="collapsible-header" style="font-weight: bold"><i class="material-icons">history</i>' + sortedMonths[i] + ' (+' + panicoPunkte[sortedMonths[i]] + ')</div> <div class="collapsible-body" style="padding: 20px; margin: 0px; display: block; background-color:#f5f5f5"> <table class="bordered highlight"> <tbody>';
+                }
+                var platz = 0;
+                var previousPlayerPoints = 0;
+                for (var j = 0; j < sortedTable.length; j++) {
+                    var useID = sortedTable[j].key;
+                    var item = monthtable[useID];
+                    var myPoints = item['timestamp'];
+                    if (previousPlayerPoints != myPoints) {
+                        //Check if Player has more points than previous Player (unequal is enough as the array has been sorted anyways)
+                        //If player has less points, he will be ranked down
+                        platz += 1;
+                    }
+                    if (monthNumber == 2) {
+                      //if the past month is looped, Panico are calculated
+                        entry[item['name']] = panicoCalc(platz, panicoPunkte[sortedMonths[i]]);
+                        panicoMonth = sortedMonths[i]; //The month of the panico calculations is saved for later
+                    }
+                    //Building lines of the table
+                    if (localStorage.getItem('username') == item['name']) {
+                      //highlight the values of the current user
+                        monthlytableHTML += '<tr style="color: #3f51b5; font-weight: bold">';
+                    } else {
+                        monthlytableHTML += '<tr>';
+                    }
+                    monthlytableHTML += '<td>' + platz + '.</td>';
+                    monthlytableHTML += '<td>' + item['name'] + '</td>';
+                    monthlytableHTML += '<td>' + -myPoints + '</td>';
+                    monthlytableHTML += '</tr>';
+                    previousPlayerPoints = myPoints;
+                }
+                monthlytableHTML += '</tbody> </table> </div> </li>';
+            }
+        }
+        monthlytableHTML += '</ul>';
+        //Panico are submitted to the database
+        dbRefPanico = firebase.database().ref('table/panico/' + panicoMonth);
+        dbRefPanico.update(entry);
+
+        document.getElementById('monthyTables').innerHTML = monthlytableHTML;
+
+        localStorage.setItem('monthyTables', monthlytableHTML);
+
+        $('.collapsible').collapsible({
+            accordion: false
+        });
+    });
+}
+
+function panicoCalc(platz, multiplier) {
+    if (platz == 1) {
+        panicoPoints = multiplier;
+    } else if (platz == 2) {
+        panicoPoints = multiplier * 0.5;
+    } else {
+        panicoPoints = 0;
+    }
+    return panicoPoints;
+}
+
+function panicoHTML(allPlayersScores, dbPanicoTable) {
     tableHTML = '<table class="striped">';
-    tableHTML += '<thead><tr><th data-field="platz">Platz</th><th data-field="name">Name</th><th data-field="points">Punkte</th></tr></thead>';
+    tableHTML += '<thead><tr><th data-field="platz">Platz</th><th data-field="name">Name</th><th data-field="points">Panico</th><th data-field="points">Punkte</th></tr></thead>';
     tableHTML += '<tbody>';
     var table = [];
     for (var p in allPlayersScores) {
         //Looping over all Players
+        var totalPanico = 0;
+        for (var m in dbPanicoTable) {
+            //Panico are calculated
+            totalPanico += dbPanicoTable[m][p];
+        }
+        //Normal Points are calculated
         var singlePlayerScores = allPlayersScores[p];
         var singlePlayerPoints = 0;
         for (var s in singlePlayerScores) {
@@ -812,8 +995,10 @@ function tabelleBuilder(allPlayersScores) {
         //Push player and points to array (points are named timestamp just to used the same ordering function and are negative to reverse sorting)
         table.push({
             name: p,
-            timestamp: -singlePlayerPoints
+            timestamp: -totalPanico,
+            normalpoints: singlePlayerPoints
         })
+
     }
     //Sorting table
     var sortedTable = sortingObject('timestamp', table);
@@ -823,6 +1008,7 @@ function tabelleBuilder(allPlayersScores) {
         var useID = sortedTable[i].key;
         var item = table[useID];
         var myPoints = -item['timestamp'];
+        var normalPoints = item['normalpoints'];
         if (previousPlayerPoints != myPoints) {
             //Check if Player has more points than previous Player (unequal is enough as the array has been sorted anyways)
             //If player has less points, he will be ranked down
@@ -837,12 +1023,20 @@ function tabelleBuilder(allPlayersScores) {
         tableHTML += '<td>' + platz + '.</td>';
         tableHTML += '<td>' + item['name'] + '</td>';
         tableHTML += '<td>' + myPoints + '</td>';
+        tableHTML += '<td>' + normalPoints + '</td>';
         tableHTML += '</tr>';
         previousPlayerPoints = myPoints;
     }
     tableHTML += '</tbody></table>';
     mainTable.innerHTML = tableHTML;
     makeReady();
+}
+
+function monthStartEnd(date) {
+    var date = new Date(date);
+    var firstDay = Math.floor(new Date(date.getFullYear(), date.getMonth(), 1));
+    var lastDay = Math.floor(new Date(date.getFullYear(), date.getMonth() + 1,0,  23,59,59));
+    return [firstDay, lastDay];
 }
 
 
@@ -911,7 +1105,7 @@ function pastGamesBuilder(pastGamesDB) {
                         cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
                         cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
                         cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
-                        cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + moment(new Date(item['timestamp'])).format('LLLL')  + ' Uhr</p>';
+                        cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr</p>';
                         finalscores = false;
                         if (dbScores[useID]) {
                             finalscores = true;
@@ -1017,7 +1211,7 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
                         futurecards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
                         futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
                         futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
-                        futurecards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art']  + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="'+moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
+                        futurecards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
                         finalscores = false;
                         if (dbScores[useID]) {
                             //Checks if there already are final scores for the game
@@ -1094,7 +1288,7 @@ function sortingReverseObject(timestamp, inputObject) {
     }
     //The array is sorted
     sort_array.sort(function(x, y) {
-        return y.timestamp -  x.timestamp
+        return y.timestamp - x.timestamp
     });
     //The sorted array is returned and the object can then be read out by the sorted arrayd
     return (sort_array);
@@ -1145,7 +1339,9 @@ function callMasonry(grid, item, mode) {
         itemSelector: item,
         layoutMode: mode
     });
-    $('.tooltipped').tooltip({delay: 50});
+    $('.tooltipped').tooltip({
+        delay: 50
+    });
 }
 
 function setCookie(cname, cvalue, exdays) {
@@ -1173,24 +1369,24 @@ function getCookie(cname) {
 
 //////Google Sheets support
 
-function getResources(){
-  var config = {
-      apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
-      authDomain: "project-985851437142041413.firebaseapp.com",
-      databaseURL: "https://project-985851437142041413.firebaseio.com",
-      storageBucket: "project-985851437142041413.appspot.com",
-  };
-  firebase.initializeApp(config);
+function getResources() {
+    var config = {
+        apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
+        authDomain: "project-985851437142041413.firebaseapp.com",
+        databaseURL: "https://project-985851437142041413.firebaseio.com",
+        storageBucket: "project-985851437142041413.appspot.com",
+    };
+    firebase.initializeApp(config);
 
-  dbResources = firebase.database().ref('resources/mannschaft');
-  dbResources.on('value', function(snapshot) {
-      dbResources = snapshot.val();
-      html = "";
-      for (var j in dbResources){
-        html += j + '<br>';
-      }
-      document.getElementById('ausgabe').innerHTML = html;
-      });
+    dbResources = firebase.database().ref('resources/mannschaft');
+    dbResources.on('value', function(snapshot) {
+        dbResources = snapshot.val();
+        html = "";
+        for (var j in dbResources) {
+            html += j + '<br>';
+        }
+        document.getElementById('ausgabe').innerHTML = html;
+    });
 }
 
 function importJSON() {
@@ -1203,83 +1399,18 @@ function importJSON() {
     firebase.initializeApp(config);
     dbRefSpiele = firebase.database().ref().child('spiele');
     entries = {};
-    entries["1472669100000DeutschlandFinnland"] = {
+    entries["1474723800000FSVMainz05BayerLeverkusen"] = {
         "art": "Spiel",
         "bonuspunkte": 0,
         "fortschritt": "Normal",
-        "land": "International",
+        "land": "Deutschland",
         "length": {
             "90": "90"
         },
-        "mannschaft1": "Deutschland",
-        "mannschaft2": "Finnland",
-        "timestamp": 1472669100000,
-        "wettbewerb": "Freundschaft"
-    };
-    entries["1472755500000BelgienSpanien"] = {
-        "art": "Spiel",
-        "bonuspunkte": 0,
-        "fortschritt": "Normal",
-        "land": "International",
-        "length": {
-            "90": "90"
-        },
-        "mannschaft1": "Belgien",
-        "mannschaft2": "Spanien",
-        "timestamp": 1472755500000,
-        "wettbewerb": "Freundschaft"
-    };
-    entries["1472755500000ItalienFrankreich"] = {
-        "art": "Spiel",
-        "bonuspunkte": 0,
-        "fortschritt": "Normal",
-        "land": "International",
-        "length": {
-            "90": "90"
-        },
-        "mannschaft1": "Italien",
-        "mannschaft2": "Frankreich",
-        "timestamp": 1472755500000,
-        "wettbewerb": "Freundschaft"
-    };
-    entries["1473014700000NorwegenDeutschland"] = {
-        "art": "Spiel",
-        "bonuspunkte": 0,
-        "fortschritt": "Normal",
-        "land": "International",
-        "length": {
-            "90": "90"
-        },
-        "mannschaft1": "Norwegen",
-        "mannschaft2": "Deutschland",
-        "timestamp": 1473014700000,
-        "wettbewerb": "WM Qualifikation"
-    };
-    entries["1473101100000IsraelItalien"] = {
-        "art": "Spiel",
-        "bonuspunkte": 0,
-        "fortschritt": "Normal",
-        "land": "International",
-        "length": {
-            "90": "90"
-        },
-        "mannschaft1": "Israel",
-        "mannschaft2": "Italien",
-        "timestamp": 1473101100000,
-        "wettbewerb": "WM Qualifikation"
-    };
-    entries["1473187500000SchweizPortugal"] = {
-        "art": "Spiel",
-        "bonuspunkte": 0,
-        "fortschritt": "Normal",
-        "land": "International",
-        "length": {
-            "90": "90"
-        },
-        "mannschaft1": "Schweiz",
-        "mannschaft2": "Portugal",
-        "timestamp": 1473187500000,
-        "wettbewerb": "WM Qualifikation"
+        "mannschaft1": "FSV Mainz 05",
+        "mannschaft2": "Bayer Leverkusen",
+        "timestamp": 1474723800000,
+        "wettbewerb": "Bundesliga"
     };
     console.log(entries);
     dbRefSpiele.update(entries);
