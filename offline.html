@@ -42,7 +42,7 @@
     </header>
     <main class="container">
         <div class="row" style="margin-bottom:0px">
-            <div class="col s12">
+            <div class="col s10">
                 <a href="/">
                     <div class="card red">
                         <div class="card-content center white-text" style="padding:10px">
@@ -51,8 +51,47 @@
                     </div>
                 </a>
             </div>
+            <div class="col s2">
+                <a href="#modal1" class="modal-trigger">
+                    <div class="card" style="background-color: #D0D0D0; color: #000">
+                        <div class="card-content center" style="padding:10px">
+                            <b>?</b>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div id="modal1" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h4>Offline Modus</h4>
+                <p>Dieser Modus wird aktiviert, wenn dein Gerät offline ist.
+                    <br>Hier wird dir der von dir zuletzt (auf diesem Browser/Device) abgerufene Stand von Tipps anzeigen zur Verfügung gestellt.
+                    <br>
+                    <br>Letztes Update Panicotabelle: <i id="panicoDate"></i>
+                    <br>
+                    <br>Letztes Update Monatstabelle: <i id="monthDate"></i>
+                    <br>
+                    <br>Letztes Update Tipps: <i id="tippsDate"></i>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            </div>
         </div>
         <div class="row grid1" id="futureGames">
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                      <p style="font-size:larger; font-weight:bold">Panicotabelle</p>
+                        <div id="mainTable"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col s12"  id="monthyTables"></div>
         </div>
         <div class="row grid2" id="pastGames">
         </div>

@@ -59,7 +59,12 @@
                 </div>
             </div>
         </form>
-        <input class="btn right" name="submit" type="submit" value="Tipps abgeben" onclick="submitTipps(CurrentGames)" />
+        <input class="btn right hide-on-small-only" name="submit" type="submit" value="Tipps abgeben" onclick="submitTipps(CurrentGames)" />
+        <div class="fixed-action-btn hide-on-med-and-up" style="bottom: 24px; right: 24px; z-index: 997;">
+            <a class="btn-floating btn-large" onclick="submitTipps(CurrentGames)">
+                <i class="large material-icons" style="font-size: 1.7rem; padding-left: 4px;">send</i>
+            </a>
+        </div>
         <div class="row">
         </div>
         <p id="datevalue"></p>

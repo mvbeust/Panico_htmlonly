@@ -78,9 +78,20 @@ function OfflinePageBuilder() {
     cards = localStorage.getItem('pastgames');
     pastgamesdiv = document.getElementById('pastGames');
     pastgamesdiv.innerHTML = cards;
+    document.getElementById('mainTable').innerHTML = localStorage.getItem('monthTable');
+    document.getElementById('monthyTables').innerHTML = localStorage.getItem('monthyTables');
+    document.getElementById('panicoDate').innerHTML = moment(localStorage.getItem('panicoDate')).format('LLLL') + ' (' + moment(localStorage.getItem('panicoDate')).fromNow() + ')';
+    document.getElementById('monthDate').innerHTML = moment(localStorage.getItem('monthDate')).format('LLLL') + ' (' + moment(localStorage.getItem('monthDate')).fromNow() + ')';
+    document.getElementById('tippsDate').innerHTML = moment(localStorage.getItem('tippsDate')).format('LLLL') + ' (' + moment(localStorage.getItem('tippsDate')).fromNow() + ')';
+
     makeReady();
     callMasonry('grid1', 'grid-item');
     callMasonry('grid2', 'grid-item');
+    $('.modal-trigger').leanModal();
+    $('.material-icons').hide();
+    $('.collapsible').collapsible({
+        accordion: false
+    });
 }
 
 function ArchivPageBuilder() {
@@ -796,6 +807,7 @@ function calcPointsSpecial(submittedGameID, scoreM1, scoreM2, length, winner, bo
 function tabelleBuilder(allPlayersScores) {
     //Calc Table for current Month
     month = 1;
+    onedayArray(allPlayersScores, 24);
     monthTable(allPlayersScores, month);
     if (new Date() > new Date("2016-09-01")) {
         //Calc Table for last month
@@ -805,43 +817,43 @@ function tabelleBuilder(allPlayersScores) {
 }
 
 function monthTable(allPlayersScores, month) {
-  //This function requests all games that are in a specified month
-  //Labels for months are created
-  monthLabels = [0, "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-  if(new Date() > new Date("2017-08-15")){
-    //This is a check that checks if the Season has ended
-    return;
-  }
-  //get all games that are in the specified month
-  currentMonth = new Date().getMonth() + month;
-  //label the specified month
-  label = monthLabels[currentMonth];
-  if (currentMonth < 10) {
-      currentMonth = "0" + currentMonth;
-  }
-  currentMonth = new Date("2016-" + currentMonth + "-01T00:00:00");
-  //get first and late point in time of specified month
-  currentMonth = monthStartEnd(currentMonth);
+    //This function requests all games that are in a specified month
+    //Labels for months are created
+    monthLabels = [0, "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+    if (new Date() > new Date("2017-08-15")) {
+        //This is a check that checks if the Season has ended
+        return;
+    }
+    //get all games that are in the specified month
+    currentMonth = new Date().getMonth() + month;
+    //label the specified month
+    label = monthLabels[currentMonth];
+    if (currentMonth < 10) {
+        currentMonth = "0" + currentMonth;
+    }
+    currentMonth = new Date("2016-" + currentMonth + "-01T00:00:00");
+    //get first and late point in time of specified month
+    currentMonth = monthStartEnd(currentMonth);
 
-  //Request all games in the specified month
-  dbRefCurrentMonthGames = firebase.database().ref().child('spiele');
-  dbRefCurrentMonthGames = dbRefCurrentMonthGames.orderByChild('timestamp');
-  dbRefCurrentMonthGames = dbRefCurrentMonthGames.startAt(currentMonth[0]).endAt(currentMonth[1]);
+    //Request all games in the specified month
+    dbRefCurrentMonthGames = firebase.database().ref().child('spiele');
+    dbRefCurrentMonthGames = dbRefCurrentMonthGames.orderByChild('timestamp');
+    dbRefCurrentMonthGames = dbRefCurrentMonthGames.startAt(currentMonth[0]).endAt(currentMonth[1]);
 
-  dbRefCurrentMonthGames.on('value', function(snapshot) {
-      CurrentMonthGames = snapshot.val();
-      calcMonthPoints(CurrentMonthGames, allPlayersScores, label);
-  });
+    dbRefCurrentMonthGames.on('value', function(snapshot) {
+        CurrentMonthGames = snapshot.val();
+        calcMonthPoints(CurrentMonthGames, allPlayersScores, label);
+    });
 
-  dbPanicoTable = firebase.database().ref('table').child('panico');
-  dbPanicoTable.on('value', function(snapshot) {
-      dbPanicoTable = snapshot.val();
-      panicoHTML(allPlayersScores, dbPanicoTable);
-  });
+    dbPanicoTable = firebase.database().ref('table').child('panico');
+    dbPanicoTable.on('value', function(snapshot) {
+        dbPanicoTable = snapshot.val();
+        panicoHTML(allPlayersScores, dbPanicoTable);
+    });
 }
 
 function calcMonthPoints(CurrentMonthGames, allPlayersScores, label) {
-  //This function calculates the points of every player in every month and submits them to the database
+    //This function calculates the points of every player in every month and submits them to the database
     var table = {};
     for (var p in allPlayersScores) {
         //Looping over all Players
@@ -866,7 +878,7 @@ function calcMonthPoints(CurrentMonthGames, allPlayersScores, label) {
 }
 
 function createSubtables() {
-  //This function displays the monthly tables of all months in the database and calls a panico calculation
+    //This function displays the monthly tables of all months in the database and calls a panico calculation
     sortedMonths = ["Juli", "Juni", "Mai", "April", "März", "Februar", "Januar", "Dezember", "November", "Oktober", "September", "August"];
     panicoPunkte = {
         "Juli": 12,
@@ -899,7 +911,8 @@ function createSubtables() {
                     //The Data for every player is entered into an array
                     monthtable.push({
                         name: p,
-                        timestamp: singleSubtable[p]
+                        timestamp: singleSubtable[p],
+                        onedaypoints: subtables['oneday'][p]
                     })
 
                 }
@@ -909,8 +922,10 @@ function createSubtables() {
                 if (monthNumber == 1) {
                     //Special HTML formatting for curent month
                     monthlytableHTML += '<li><div class="collapsible-header active" style="font-weight: bold"><i class="material-icons">today</i>' + sortedMonths[i] + ' (+' + panicoPunkte[sortedMonths[i]] + ')</div> <div class="collapsible-body" style="padding: 20px; margin: 0px; display: block; background-color:#f5f5f5"> <table class="bordered highlight"> <tbody>';
+                    monthlytableHTML += '<tr><th>Platz</th><th>Name</th><th>Punke</th><th>24hrs</th></tr>';
                 } else {
                     monthlytableHTML += '<li><div class="collapsible-header" style="font-weight: bold"><i class="material-icons">history</i>' + sortedMonths[i] + ' (+' + panicoPunkte[sortedMonths[i]] + ')</div> <div class="collapsible-body" style="padding: 20px; margin: 0px; display: block; background-color:#f5f5f5"> <table class="bordered highlight"> <tbody>';
+                    monthlytableHTML += '<tr><th>Platz</th><th>Name</th><th>Punke</th></tr>';
                 }
                 var platz = 0;
                 var previousPlayerPoints = 0;
@@ -924,13 +939,13 @@ function createSubtables() {
                         platz += 1;
                     }
                     if (monthNumber == 2) {
-                      //if the past month is looped, Panico are calculated
+                        //if the past month is looped, Panico are calculated
                         entry[item['name']] = panicoCalc(platz, panicoPunkte[sortedMonths[i]]);
                         panicoMonth = sortedMonths[i]; //The month of the panico calculations is saved for later
                     }
                     //Building lines of the table
                     if (localStorage.getItem('username') == item['name']) {
-                      //highlight the values of the current user
+                        //highlight the values of the current user
                         monthlytableHTML += '<tr style="color: #3f51b5; font-weight: bold">';
                     } else {
                         monthlytableHTML += '<tr>';
@@ -938,11 +953,21 @@ function createSubtables() {
                     monthlytableHTML += '<td>' + platz + '.</td>';
                     monthlytableHTML += '<td>' + item['name'] + '</td>';
                     monthlytableHTML += '<td>' + -myPoints + '</td>';
+                    if (monthNumber == 1) {
+                        n = item['onedaypoints'];
+                        monthlytableHTML += '<td>' + (n <= 0 ? '' : '+') + n + '</td>';
+                    }
                     monthlytableHTML += '</tr>';
                     previousPlayerPoints = myPoints;
                 }
                 monthlytableHTML += '</tbody> </table> </div> </li>';
             }
+        }
+        if (monthNumber == 2) {
+            monthly2tableHTML = monthlytableHTML;
+            monthly2tableHTML += '</ul>';
+            localStorage.setItem('monthyTables', monthly2tableHTML);
+            localStorage.setItem('monthDate', new Date());
         }
         monthlytableHTML += '</ul>';
         //Panico are submitted to the database
@@ -950,8 +975,6 @@ function createSubtables() {
         dbRefPanico.update(entry);
 
         document.getElementById('monthyTables').innerHTML = monthlytableHTML;
-
-        localStorage.setItem('monthyTables', monthlytableHTML);
 
         $('.collapsible').collapsible({
             accordion: false
@@ -1029,13 +1052,52 @@ function panicoHTML(allPlayersScores, dbPanicoTable) {
     }
     tableHTML += '</tbody></table>';
     mainTable.innerHTML = tableHTML;
+    localStorage.setItem('monthTable', tableHTML);
+    localStorage.setItem('panicoDate', new Date());
     makeReady();
+}
+
+function onedayArray(allPlayersScores, gobackhours) {
+    //Calculates the points from a specific point in time to the current time (usually 24 hours)
+    CurrentTime = Math.floor(Date.now());
+    millisecs = 60000;
+
+    //Create Timebreak between past and future
+    TimeBreak = CurrentTime - (gobackhours * 60 * millisecs);
+
+    //Select entries for furute and current games
+    dbRefOnedayGames = firebase.database().ref().child('spiele');
+    dbRefOnedayGames = dbRefOnedayGames.orderByChild('timestamp');
+    dbRefOnedayGames = dbRefOnedayGames.startAt(TimeBreak).endAt(CurrentTime);
+    dbRefOnedayGames.on('value', function(snapshot) {
+        onedayGames = snapshot.val();
+        var oneday = {};
+        for (var p in allPlayersScores) {
+            //Looping over all Players
+            var singlePlayerScores = allPlayersScores[p];
+            var singlePlayerPoints = 0;
+            var onedayscore = 0;
+            for (var s in onedayGames) {
+                //Looping over all games for every player
+                if (singlePlayerScores[s]) {
+                    if (singlePlayerScores[s]['totalpoints'] > 0 || singlePlayerScores[s]['totalpoints'] < 0) {
+                        if (onedayGames[s].timestamp > TimeBreak) {
+                            onedayscore += singlePlayerScores[s]['totalpoints'];
+                        }
+                    }
+                }
+            }
+            oneday[p] = onedayscore;
+        }
+        dbRefOnedayTable = firebase.database().ref('table/month/oneday');
+        dbRefOnedayTable.update(oneday);
+    });
 }
 
 function monthStartEnd(date) {
     var date = new Date(date);
     var firstDay = Math.floor(new Date(date.getFullYear(), date.getMonth(), 1));
-    var lastDay = Math.floor(new Date(date.getFullYear(), date.getMonth() + 1,0,  23,59,59));
+    var lastDay = Math.floor(new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59));
     return [firstDay, lastDay];
 }
 
@@ -1076,18 +1138,23 @@ function pastGamesBuilder(pastGamesDB) {
                     var nonTippAdded = false;
                     for (j in dbPlayers) {
                         //Checking if every player has submitted a tipp
+                        if (localStorage.getItem('username') == j) {
+                            addstyle = 'color: #3f51b5; font-weight: bold;';
+                        } else {
+                            addstyle = '';
+                        }
                         if (dbPlayers[j][useID]) {
                             countTipps += 1;
                             //create playersline for table
-                            namePlayersLine += "<th>" + j + "</th>";
-                            tippPlayersLine += '<td>' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
+                            namePlayersLine += "<th style='"+addstyle+"'>" + j + "</th>";
+                            tippPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
                             if (dbPlayers[j][useID].length == "") {
-                                lengthPlayersLine += '<td style="font-size:smaller;">Non-Tipp</td>';
+                                lengthPlayersLine += '<td style="'+addstyle+'font-size:smaller;">Non-Tipp</td>';
                                 nonTippAdded = true;
                             } else {
-                                lengthPlayersLine += '<td>' + dbPlayers[j][useID].length + '</td>';
+                                lengthPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].length + '</td>';
                             }
-                            winnerPlayersLine += '<td style="font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
+                            winnerPlayersLine += '<td style="'+addstyle+'font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
                             n = dbPlayers[j][useID].totalpoints;
 
                             if (nonTippAdded == false && dbPlayers[j][useID].nontipp) {
@@ -1095,7 +1162,7 @@ function pastGamesBuilder(pastGamesDB) {
                             } else {
                                 nontippInfo = "";
                             }
-                            pointsPlayersLine += '<td  style="border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
+                            pointsPlayersLine += '<td style="'+addstyle+'border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
                         }
                     }
                     namePlayersLine += "</thead></tr>";
@@ -1144,6 +1211,7 @@ function pastGamesBuilder(pastGamesDB) {
                         cards += '</div></div></div>';
                         pastGames.innerHTML = cards;
                         localStorage.setItem('pastgames', cards);
+                        localStorage.setItem('tippsDate', new Date());
                     }
                 }
                 callMasonry('grid2', 'grid-item');
@@ -1187,21 +1255,34 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
                     var lengthPlayersLine = "";
                     var winnerPlayersLine = "";
                     var pointsPlayersLine = "";
+                    var nonTippAdded = false;
                     for (j in dbPlayers) {
                         //Checking if every player has submitted a tipp
+                        if (localStorage.getItem('username') == j) {
+                            addstyle = 'color: #3f51b5; font-weight: bold;';
+                        } else {
+                            addstyle = '';
+                        }
                         if (dbPlayers[j][useID]) {
                             countTipps += 1;
                             //create playersline for table
-                            namePlayersLine += "<th>" + j + "</th>";
-                            tippPlayersLine += '<td>' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
+                            namePlayersLine += "<th style='"+addstyle+"'>" + j + "</th>";
+                            tippPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
                             if (dbPlayers[j][useID].length == "") {
-                                lengthPlayersLine += '<td style="font-size:smaller;">Non-Tipp</td>';
+                                lengthPlayersLine += '<td style="'+addstyle+'font-size:smaller;">Non-Tipp</td>';
+                                nonTippAdded = true;
                             } else {
-                                lengthPlayersLine += '<td>' + dbPlayers[j][useID].length + '</td>';
+                                lengthPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].length + '</td>';
                             }
-                            winnerPlayersLine += '<td style="font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
+                            winnerPlayersLine += '<td style="'+addstyle+'font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
                             n = dbPlayers[j][useID].totalpoints;
-                            pointsPlayersLine += '<td  style="border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + '</td>';
+
+                            if (nonTippAdded == false && dbPlayers[j][useID].nontipp) {
+                                nontippInfo = " (NT)";
+                            } else {
+                                nontippInfo = "";
+                            }
+                            pointsPlayersLine += '<td style="'+addstyle+'border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
                         }
                     }
                     namePlayersLine += "</thead></tr>";
@@ -1250,6 +1331,7 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
                         futurecards += '</div></div></div>';
                         futureGames.innerHTML = futurecards;
                         localStorage.setItem('futuregames', futurecards);
+                        localStorage.setItem('tippsDate', new Date());
                     }
                 }
                 callMasonry('grid1');
@@ -1317,6 +1399,9 @@ function pageBuilder() {
 function makeReady() {
     //Trigger javascript to activate elements for navigation and dropdowns
     $('select').material_select();
+}
+
+function sideNavAcitvation() {
     $(".button-collapse").sideNav();
 }
 
