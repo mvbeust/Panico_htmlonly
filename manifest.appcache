@@ -3,12 +3,12 @@ CACHE MANIFEST
 
 # Explicitly cached entries
 /css/materializenew.min.css
-/js/script.js
+/js/script.min.js
 
 # offline.html will be displayed if the user is offline
 FALLBACK:
-/index.html offline.html
-/ offline.html
+/index.html offline
+/ offline
 
 # All other resources require the user to be online.
 NETWORK:
@@ -27,12 +27,12 @@ CACHE:
 /js/moment.min.js
 /js/de.js
 
-/inc/navigation.html
-/inc/footer.html
-/faq/index.html
-/archiv/index.html
-/tabelle/index.html
-/tipps/index.html
+/inc/navigation
+/inc/footer
+/faq/
+/archiv/
+/tabelle/
+/tipps/
 
 /img/materializecss.png
 /img/rss.png
