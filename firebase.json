@@ -17,12 +17,11 @@
         "value" : "*"
       } ]
       }, {
-      "source" : "**/*.@(jpg|jpeg|gif|png|css|js)",
+      "source" : "**/*.@(jpg|jpeg|gif|png|css|js|woff|woff2)",
       "headers" : [ {
         "key" : "Cache-Control",
-        "value" : "max-age=72000"
+        "value" : "max-age=7200000"
       } ]
-      } ],
-    "cleanUrls": true
+      } ]
   }
 }

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 01-09-2016: v1.005
+# 03-09-2016: v1.006
 
 # Explicitly cached entries
 /css/materializenew.min.css
@@ -7,8 +7,8 @@ CACHE MANIFEST
 
 # offline.html will be displayed if the user is offline
 FALLBACK:
-/index.html offline
-/ offline
+/index.html offline.html
+/ offline.html
 
 # All other resources require the user to be online.
 NETWORK:
@@ -27,18 +27,20 @@ CACHE:
 /js/moment.min.js
 /js/de.js
 
-/inc/navigation
-/inc/footer
+/inc/navigation.html
+/inc/footer.html
 /faq/
-/archiv/
-/tabelle/
-/tipps/
+/archiv/index.html
+/tabelle/index.html
+/tipps/index.html
 
 /img/materializecss.png
-/img/rss.png
 /img/twitter.png
 /img/maxvonbeust.png
-/img/logo.png
 /img/logonav.png
 favicon.ico
-/fonts/*
+/fonts/icons/MaterialIcons-Regular.woff2
+/fonts/roboto/Roboto-Bold.woff2
+/fonts/roboto/Roboto-Medium.woff2
+/fonts/roboto/Roboto-Light.woff2
+/fonts/roboto/Roboto-Regular.woff2

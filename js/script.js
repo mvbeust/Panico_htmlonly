@@ -1105,12 +1105,8 @@ function monthStartEnd(date) {
 //////Build Tipps Anzeigen Functions
 function pastGamesBuilder(pastGamesDB) {
     var sortedTimes = sortingReverseObject('timestamp', pastGamesDB);
-    var pastGamesArray = [];
-    var countPlayers = 0;
-    var printedCards = 0;
     dbScores = firebase.database().ref().child('scores');
     dbResources = firebase.database().ref().child('resources');
-    cards = '';
     dbResources.once('value').then(function(snapshot) {
         dbWettbewerb = snapshot.child('wettbewerb').val();
         dbMannschaft = snapshot.child('mannschaft').val();
@@ -1119,6 +1115,10 @@ function pastGamesBuilder(pastGamesDB) {
             dbPlayers = firebase.database().ref().child('players');
             dbPlayers.on('value', function(snapshot) {
                 dbPlayers = snapshot.val();
+                cards = '';
+                var pastGamesArray = [];
+                var countPlayers = 0;
+                var printedCards = 0;
                 for (var p in dbPlayers) {
                     //Counting number of players
                     countPlayers += 1;
@@ -1226,11 +1226,8 @@ function pastGamesBuilder(pastGamesDB) {
 
 function futureGamesBuilder(futureGamesDB, CurrentTime) {
     var sortedTimes = sortingObject('timestamp', futureGamesDB);
-    var pastGamesArray = [];
-    var countPlayers = 0;
     dbScores = firebase.database().ref().child('scores');
     dbResources = firebase.database().ref().child('resources');
-    futurecards = '';
     dbResources.once('value').then(function(snapshot) {
         dbWettbewerb = snapshot.child('wettbewerb').val();
         dbMannschaft = snapshot.child('mannschaft').val();
@@ -1238,6 +1235,9 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
             dbScores = snapshot.val();
             dbPlayers = firebase.database().ref().child('players');
             dbPlayers.on('value', function(snapshot) {
+                futurecards = '';
+                var pastGamesArray = [];
+                var countPlayers = 0;
                 dbPlayers = snapshot.val();
                 for (var p in dbPlayers) {
                     //Counting number of players
