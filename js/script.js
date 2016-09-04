@@ -826,8 +826,7 @@ function monthTable(allPlayersScores, month) {
     }
     //get all games that are in the specified month
     currentMonth = new Date().getMonth() + month;
-    //label the specified month
-    label = monthLabels[currentMonth];
+
     if (currentMonth < 10) {
         currentMonth = "0" + currentMonth;
     }
@@ -842,6 +841,8 @@ function monthTable(allPlayersScores, month) {
 
     dbRefCurrentMonthGames.on('value', function(snapshot) {
         CurrentMonthGames = snapshot.val();
+       //label the specified month
+        label = monthLabels[new Date().getMonth() + month];
         calcMonthPoints(CurrentMonthGames, allPlayersScores, label);
     });
 
