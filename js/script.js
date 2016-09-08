@@ -830,9 +830,10 @@ function monthTable(allPlayersScores, month) {
     if (currentMonth < 10) {
         currentMonth = "0" + currentMonth;
     }
-    currentMonth = new Date("2016-" + currentMonth + "-01T00:00:00");
+    currentMonth = new Date("2016-" + currentMonth + "-01T00:00:00+02:00");
     //get first and late point in time of specified month
     currentMonth = monthStartEnd(currentMonth);
+    console.log(currentMonth[1]);
 
     //Request all games in the specified month
     dbRefCurrentMonthGames = firebase.database().ref().child('spiele');
@@ -1097,8 +1098,8 @@ function onedayArray(allPlayersScores, gobackhours) {
 
 function monthStartEnd(date) {
     var date = new Date(date);
-    var firstDay = Math.floor(new Date(date.getFullYear(), date.getMonth(), 1));
-    var lastDay = Math.floor(new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59));
+    var firstDay = Math.floor(new Date(Date.UTC(date.getFullYear(), date.getMonth(), 1)));
+    var lastDay = Math.floor(new Date(Date.UTC(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)));
     return [firstDay, lastDay];
 }
 
