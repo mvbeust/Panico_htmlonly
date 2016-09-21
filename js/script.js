@@ -142,7 +142,7 @@ function TippsPageBuilder() {
         //Select entries for furute and current games
         dbRefFutureGames = firebase.database().ref().child('spiele');
         dbRefFutureGames = dbRefFutureGames.orderByChild('timestamp');
-        dbRefFutureGames = dbRefFutureGames.startAt(TimeBreak).limitToFirst(15);
+        dbRefFutureGames = dbRefFutureGames.startAt(TimeBreak).limitToFirst(16);
         dbRefFutureGames.on('value', function(snapshot) {
             futureGamesDB = snapshot.val();
             futureGamesBuilder(futureGamesDB, CurrentTime);
@@ -151,7 +151,7 @@ function TippsPageBuilder() {
         //Select entries for past games
         dbRefPastGames = firebase.database().ref().child('spiele');
         dbRefPastGames = dbRefPastGames.orderByChild('timestamp');
-        dbRefPastGames = dbRefPastGames.endAt(TimeBreak).limitToFirst(25);
+        dbRefPastGames = dbRefPastGames.endAt(TimeBreak).limitToLast(26);
         dbRefPastGames.on('value', function(snapshot) {
             pastGamesDB = snapshot.val();
             pastGamesBuilder(pastGamesDB);
@@ -748,7 +748,7 @@ function calcPointsSpecial(submittedGameID, scoreM1, scoreM2, length, winner, bo
                         totalpoints += 1;
                     }
                     if (playerWinner == winner) {
-                        totalpoints += parseInt(bonuspunkte);
+                        totalpoints += Number(bonuspunkte);
                     }
                     submitPoints += ',  "length":"' + playerLength + '", "winner":"' + playerWinner + '"';
                     submitPoints += ',"totalpoints":' + totalpoints;
@@ -1486,7 +1486,7 @@ function importJSON() {
     firebase.initializeApp(config);
     dbRefSpiele = firebase.database().ref().child('spiele');
     entries = {};
-    entries["1474723800000FSVMainz05BayerLeverkusen"] = {
+    entries["1475339400000BayerLeverkusenBorussiaDortmund"] = {
         "art": "Spiel",
         "bonuspunkte": 0,
         "fortschritt": "Normal",
@@ -1494,9 +1494,9 @@ function importJSON() {
         "length": {
             "90": "90"
         },
-        "mannschaft1": "FSV Mainz 05",
-        "mannschaft2": "Bayer Leverkusen",
-        "timestamp": 1474723800000,
+        "mannschaft1": "Bayer Leverkusen",
+        "mannschaft2": "Borussia Dortmund",
+        "timestamp": 1475339400000,
         "wettbewerb": "Bundesliga"
     };
     console.log(entries);
