@@ -177,7 +177,8 @@ function AddGamesbuildingHTML(allGames) {
         "timestamp": "datetime",
         "oldtimestamp": "datetime",
         "bonuspunkte": "number",
-        "length": "multiple"
+        "length": "multiple",
+        "hinspiel": "text",
     };
     var form = "";
     for (var i in formfields) {
@@ -185,6 +186,8 @@ function AddGamesbuildingHTML(allGames) {
             form += '<div class="input-field col s12"><select multiple id="length"><option value="" disabled selected>Choose Length</option><option value="90">90</option><option value="120">120</option><option value="11er">11er</option></select><label>Length</label></div>'
         } else if (i == "oldtimestamp") {
             form += '<div class="input-field col s12 hide"><input type="' + formfields[i] + '" id="' + i + '" name="' + i + '" /><label for="' + i + '">' + i + '</label></div>';
+        } else if (i == "hinspiel") {
+            form += '<div class="input-field col s12"><input class="autocomplete" type="' + formfields[i] + '" id="' + i + '" name="' + i + '" required/><label for="' + i + '">' + i + '</label></div>';
         } else {
             form += '<div class="input-field col s12 m6"><input class="autocomplete" type="' + formfields[i] + '" id="' + i + '" name="' + i + '" required/><label for="' + i + '">' + i + '</label></div>';
         }
@@ -221,11 +224,20 @@ function AddGamesbuildingHTML(allGames) {
             } else if (j == "oldtimestamp") {} else {
                 table += '<td>' + item[j] + '</td>';
             }
+            if (j == "hinspiel") {
+                if (item["art"] == "Hinspiel") {
+                  console.log(useID);
+                }
+            }
         }
         passID = "'" + useID + "'";
         table += '<td><input class="btn" name="edit" type="submit" value="Edit" onclick="editGames(allGames,' + passID + ')" /></td>';
         table += '<td><input class="btn" name="deleteshow' + useID + '" type="submit" value="Delete" id="deleteshow' + useID + '" onclick="showDeleteButton(' + passID + ')" /><input class="btn red" style="display: none;" name="reallydelete' + useID + '" id="reallydelete' + useID + '" type="submit" value="Really?" onclick="deleteGame(' + passID + ')"/></td>';
         table += '</tr>';
+        var gameswithHinspiel = [];
+        gameswithHinspiel.push({
+            ID: useID
+        });
     }
     table += '</tbody>';
     tableGamesinDB.innerHTML = table;
@@ -240,15 +252,19 @@ function autoCompletes(inputselection) {
             inputselection = "mannschaft";
         }
     }
-    //Autocomplete list is requested from database
-    dbResources = firebase.database().ref('resources/' + inputselection);
-    dbResources.on('value', function(snapshot) {
-        dbResources = snapshot.val();
-        //Required javascript code is generated
-        $('input#' + outputSelection).autocomplete({
-            data: dbResources
+    if (inputselection == "hinspiel") {
+    } else {
+        //Autocomplete list is requested from database
+        dbResources = firebase.database().ref('resources/' + inputselection);
+        dbResources.on('value', function(snapshot) {
+            dbResources = snapshot.val();
+            console.log(dbResources);
+            //Required javascript code is generated
+            $('input#' + outputSelection).autocomplete({
+                data: dbResources
+            });
         });
-    });
+    }
 }
 
 function editGames(allGames, ID) {
@@ -396,20 +412,25 @@ function createformTippen(CurrentGames, CurrentTime) {
             } else if (fortschritt.slice(-1) == "e") {
                 fortschritt = fortschritt.substring(0, fortschritt.length - 1)
             }
+
+
             //card is opened
             cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
             cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
             cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
             cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
+            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999" id="'+useID+'notesfield"></p>';
             if (countTipps != countPlayers) {
                 m1 = item['mannschaft1'];
                 m2 = item['mannschaft2'];
+                art = item['art'];
                 transuseID = "'" + useID + "'";
                 transm1 = "'" + m1 + "'";
                 transm2 = "'" + m2 + "'";
-                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M1" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ')"><label for="' + useID + 'M1">Heim</label></div>';
-                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M2" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ')"><label for="' + useID + 'M2">Gast</label></div>';
+                transart = "'" + art + "'";
+                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M1" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')"><label for="' + useID + 'M1">Heim</label></div>';
+                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M2" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')"><label for="' + useID + 'M2">Gast</label></div>';
                 //Optionen für Länge werden erstellt
                 length = item['length'];
                 var lengthPrint = '';
@@ -511,10 +532,55 @@ function submitTipps(CurrentGames) {
     }
 }
 
-function changeWinnerSelect(useID, m1, m2) {
+function changeWinnerSelect(useID, m1, m2, art) {
     var winnerSelect = document.getElementById(useID + "Winner");
     console.log(m1);
-    if (winnerSelect) {
+    if (winnerSelect && art == "Rückspiel") {
+        firebase.database().ref('spiele/' + useID).once('value').then(function(snapshot) {
+            var hinspielID = snapshot.val().hinspiel;
+            console.log(hinspielID);
+            firebase.database().ref('scores/' + hinspielID).once('value').then(function(snapshot) {
+                var hinspielScoreM2 = snapshot.val().scoreM1;
+                var hinspielScoreM1 = snapshot.val().scoreM2;
+                console.log("Hinspiel: " + m2 + " " + hinspielScoreM2 + ":" + hinspielScoreM1 + " " + m1);
+                document.getElementById(useID + 'notesfield').innerHTML = "Hinspiel: " + m2 + " " + hinspielScoreM2 + ":" + hinspielScoreM1 + " " + m1;
+
+                //Check if a Winner actually has to be selected
+                scoreMannschaft1 = document.getElementById(useID + 'M1').value;
+                scoreMannschaft2 = document.getElementById(useID + 'M2').value;
+                if (scoreMannschaft1 && scoreMannschaft2) {
+                    //Check if there are scores are entred for both teams before comparison is  started
+                    if (scoreMannschaft1 > scoreMannschaft2) {
+                        winnerSelect.value = m1;
+                    } else if (scoreMannschaft1 < scoreMannschaft2) {
+                        winnerSelect.value = m2;
+                    } else if (scoreMannschaft1 == scoreMannschaft2) {
+                      //Wenn das Rückspiel ein Unentschieden war
+                        if (hinspielScoreM1 > hinspielScoreM2) {
+                            winnerSelect.value = m1;
+                        } else if (hinspielScoreM1 < hinspielScoreM2) {
+                            winnerSelect.value = m2;
+                        } else if (hinspielScoreM1 == hinspielScoreM2) {
+                          //Wenn das Hinspiel auch ein Unentschieden war
+                            if (scoreMannschaft2 > hinspielScoreM1) {
+                                winnerSelect.value = m2;
+                            } else if (scoreMannschaft2 < hinspielScoreM1) {
+                                winnerSelect.value = m1;
+                            }
+                        }
+                    }
+                    if((scoreMannschaft1 == hinspielScoreM1) && (scoreMannschaft2 == hinspielScoreM2)){
+                      document.getElementById(useID + 'Length').value = "11er";
+                    }else if (document.getElementById(useID + 'Length').value == "11er"){
+                      document.getElementById(useID + 'Length').value = "Länge";
+                    }
+                    $('#' + useID + 'Length').material_select();
+                    $('#' + useID + 'Winner').material_select();
+                }
+
+            });
+        });
+    } else if (winnerSelect) {
         //Check if a Winner actually has to be selected
         scoreMannschaft1 = document.getElementById(useID + 'M1').value;
         scoreMannschaft2 = document.getElementById(useID + 'M2').value;
@@ -525,11 +591,17 @@ function changeWinnerSelect(useID, m1, m2) {
             } else if (scoreMannschaft1 < scoreMannschaft2) {
                 winnerSelect.value = m2;
             }
+            if (scoreMannschaft1 == scoreMannschaft2){
+               document.getElementById(useID + 'Length').value = "11er";
+            }else if (document.getElementById(useID + 'Length').value == "11er"){
+              document.getElementById(useID + 'Length').value = "Länge";
+            }
+            $('#' + useID + 'Length').material_select();
             $('#' + useID + 'Winner').material_select();
         }
     }
-}
 
+}
 
 /////Submit Final Result Functions
 function createformErgebnis(ErgebnisGames, CurrentTime) {
@@ -1486,19 +1558,6 @@ function importJSON() {
     firebase.initializeApp(config);
     dbRefSpiele = firebase.database().ref().child('spiele');
     entries = {};
-    entries["1475339400000BayerLeverkusenBorussiaDortmund"] = {
-        "art": "Spiel",
-        "bonuspunkte": 0,
-        "fortschritt": "Normal",
-        "land": "Deutschland",
-        "length": {
-            "90": "90"
-        },
-        "mannschaft1": "Bayer Leverkusen",
-        "mannschaft2": "Borussia Dortmund",
-        "timestamp": 1475339400000,
-        "wettbewerb": "Bundesliga"
-    };
     console.log(entries);
     dbRefSpiele.update(entries);
 }
