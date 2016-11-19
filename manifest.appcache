@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 21-10-2016: v1.012
+# 26-10-2016: v1.013
 
 # Explicitly cached entries
 /css/materializenew.min.css
@@ -38,6 +38,7 @@ CACHE:
 /img/twitter.png
 /img/maxvonbeust.png
 /img/logonav.png
+/img/logo128.png
 favicon.ico
 /fonts/icons/MaterialIcons-Regular.woff2
 /fonts/roboto/Roboto-Bold.woff2

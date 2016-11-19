@@ -163,6 +163,23 @@ function TippsPageBuilder() {
     makeReady();
 }
 
+function notificationsPageBuilder(){
+  //Build page for notification management
+  if (navigator.onLine) {
+      pageBuilder();
+      if (('showNotification' in ServiceWorkerRegistration.prototype)) {
+          console.log('Notifications are supported.');
+          notificationIDhandling();
+      }else{
+        html = '';
+        html += '<span class="card-title">Notifications not supported</span>';
+        html += 'Notifications werden leider in diesem Browser nicht unterstützt. Auf iOS Geräten gibt es diese Option leider in keinem Browser.<br><br>Auf anderen Geräten sollten Chrome, Firefox oder Browser basierend auf diesen Systemen funktionieren.'
+        document.getElementById('id').innerHTML = html;
+      }
+    }
+    makeReady();
+}
+
 
 //////Addgames Functions
 function AddGamesbuildingHTML(allGames) {
@@ -572,7 +589,7 @@ function changeWinnerSelect(useID, m1, m2, art) {
                     if((scoreMannschaft1 == hinspielScoreM1) && (scoreMannschaft2 == hinspielScoreM2)){
                       document.getElementById(useID + 'Length').value = "11er";
                     }else if (document.getElementById(useID + 'Length').value == "11er"){
-                      document.getElementById(useID + 'Length').value = "Länge";
+                      document.getElementById(useID + 'Length').value = "90";
                     }
                     $('#' + useID + 'Length').material_select();
                     $('#' + useID + 'Winner').material_select();
@@ -594,7 +611,10 @@ function changeWinnerSelect(useID, m1, m2, art) {
             if (scoreMannschaft1 == scoreMannschaft2){
                document.getElementById(useID + 'Length').value = "11er";
             }else if (document.getElementById(useID + 'Length').value == "11er"){
-              document.getElementById(useID + 'Length').value = "Länge";
+              document.getElementById(useID + 'Length').value = "90";
+            }else if((scoreMannschaft1 > 0 || scoreMannschaft2 > 0) && (document.getElementById(useID + 'Length').value == "")){
+              console.log(document.getElementById(useID + 'Length').value);
+              document.getElementById(useID + 'Length').value = "90";
             }
             $('#' + useID + 'Length').material_select();
             $('#' + useID + 'Winner').material_select();
@@ -843,7 +863,7 @@ function calcPointsSpecial(submittedGameID, scoreM1, scoreM2, length, winner, bo
                     } else {
                         var playerWinner = winnerOption2;
                     }
-                    var totalpoints = 0;
+                    var totalpoints = -1;
                     //New JSON is created to overwrite current entry
                     var submitPoints = '{  "' + submittedGameID + '": {  "scoreM1": ' + playerScoreM1 + ',        "scoreM2": ' + playerScoreM2;
                     if (playerScoreM1 == scoreM1 && playerScoreM2 == scoreM2) {
@@ -857,8 +877,11 @@ function calcPointsSpecial(submittedGameID, scoreM1, scoreM2, length, winner, bo
                     if (playerLength == length) {
                         totalpoints += 1;
                     }
+                    console.log(playerWinner);
+                    console.log(winner);
                     if (playerWinner == winner) {
-                        totalpoints += parseInt(bonuspunkte);
+                        console.log(bonuspunkte);
+                        totalpoints += Number(bonuspunkte);
                     }
                     submitPoints += ',  "length":"' + playerLength + '", "winner":"' + playerWinner + '"';
                     submitPoints += ',"totalpoints":' + totalpoints;
@@ -1240,7 +1263,7 @@ function pastGamesBuilder(pastGamesDB) {
                         }
                     }
                     namePlayersLine += "</thead></tr>";
-                    if (countTipps == countPlayers) {
+                    if (countTipps == countPlayers  || CurrentTime > item['timestamp']) {
                         //Checks if every player has submitted a tipp and then proceeds to create card
                         cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
                         cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
@@ -1415,6 +1438,152 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
 }
 
 
+/////Notifications
+function notifications() {
+  //What happens when a notification is being received when the site is open
+  //otherwise this will be handled by the serviceworker
+        messaging.onMessage(function(payload) {
+            console.log(payload);
+        });
+        messaging.onTokenRefresh(function() {
+            messaging.getToken()
+                .then(function(refreshedToken) {
+                    var username = localStorage.getItem('username');
+                    var devicename = localStorage.getItem('devicename');
+                    console.log('Token refreshed.');
+                    // Indicate that the new Instance ID token has not yet been sent to the
+                    // Send Instance ID token to app server.
+                    notificationTokenServer(refreshedToken, username, devicename);
+                })
+        });
+
+}
+
+function notificationSetup() {
+    //Request permission to the notification service
+    console.log('Requesting permission...');
+    //Request Values from Form
+    player = document.getElementById("player").value;
+    devicename = document.getElementById("devicename").value;
+    console.log(player);
+    console.log(devicename);
+    if (player == "" || devicename == "") {
+      console.log("Values not provided");
+    } else {
+        //Save Values to Local Storage
+        localStorage.setItem('username', player);
+        localStorage.setItem('devicename', devicename);
+        messaging.requestPermission()
+            .then(function() {
+                //if permission to send notifications has been granted
+                console.log('Notification permission granted.');
+                return messaging.getToken();
+            })
+            .then(function(token) {
+                //dealing with the token of the notification service
+                notificationTokenServer(token, player, devicename);
+                notificationsSetting();
+            })
+    }
+}
+
+function notificationSignup() {
+    //A signup process is shown if the device is not receiving notifications
+    dbWettbewerb = firebase.database().ref();
+    dbWettbewerb.on('value', function(snapshot) {
+        dbPlayers = snapshot.child('players').val();
+        var username = localStorage.getItem('username');
+        cards = '<div class="row">';
+        cards += '<div class="col s12 m12"><div class="card"><div class="card-content"><p><label>Name</label><select id="player" required><option value="" disabled selected>Bitte auswählen</option>';
+        for (var p in dbPlayers) {
+            //Creating dropdown options and counting number of players
+            cards += '<option value="' + p + '"';
+            //Preselects username if cookie included right username
+            if (username == p) {
+                cards += 'selected';
+            }
+            cards += '>' + p + '</option>';
+        }
+        cards += '</select></p>';
+        cards += '<div class="input-field col s12"><input type="text" id="devicename" name="devicename" /><label for="devicename">Name des Geräts</label></div>';
+        cards += '<input class="btn" name="Notifications erhalten" type="submit" value="Notifications erhalten" onclick="notificationSetup()" />';
+        cards += '</div></div></div></div>';
+        document.getElementById("signupform").innerHTML = cards;
+        makeReady();
+    });
+}
+
+function notificationsSetting(){
+  //Settings are shown if the device is already registered
+  var player = localStorage.getItem('username');
+  dbRefNotifications = firebase.database().ref('notifications/' + player);
+  dbRefNotifications.on('value', function(snapshot) {
+      notificationDevices = snapshot.val();
+      html = '';
+      html += '<span class="card-title">Settings</span>';
+      html += '<table><tbody>';
+      for (var j in notificationDevices) {
+          html += "<tr>";
+          html += "<td>" + j + "</td>";
+          passID = "'"+ j + "'";
+          html += '<td><input class="btn" name="deleteshow' + j + '" type="submit" value="Delete" id="deleteshow' + j + '" onclick="showDeleteButton('+passID+')" /><input class="btn red" style="display: none;" name="reallydelete' + j + '" id="reallydelete' + j + '" type="submit" value="Really?" onclick="deleteDevice(' + passID + ')"/></td>';
+          html += "</tr>"
+      }
+      html += "</tbody></table>"
+      document.getElementById('id').innerHTML = html;
+  });
+
+}
+
+function deleteDevice(devicename){
+  //when user wants to manually remove device
+  console.log(devicename);
+  var username = localStorage.getItem('username');
+  dbRefRemoveLine = firebase.database().ref('notifications/' + username +'/' + devicename);
+  dbRefRemoveLine.remove();
+}
+
+function notificationIDhandling() {
+    // Get Instance ID token. Initially this makes a network call, once retrieved
+    // subsequent calls to getToken will return from cache.
+    messaging.getToken()
+        .then(function(currentToken) {
+            var username = localStorage.getItem('username');
+            var devicename = localStorage.getItem('devicename');
+            if (currentToken && username && devicename) {
+                notificationTokenServer(currentToken, username, devicename);
+                notificationsSetting();
+            } else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+                // Show permission UI.
+                notificationSignup();
+            }
+        })
+        //if a new notification token is given to the device this is updated on the server
+    messaging.onTokenRefresh(function() {
+        messaging.getToken()
+            .then(function(refreshedToken) {
+                var username = localStorage.getItem('username');
+                var devicename = localStorage.getItem('devicename');
+                console.log('Token refreshed.');
+                // Indicate that the new Instance ID token has not yet been sent to the
+                // Send Instance ID token to app server.
+                notificationTokenServer(refreshedToken, username, devicename);
+            })
+    });
+}
+
+function notificationTokenServer(token, player, devicename){
+  console.log(token);
+  dbRefNotifications = firebase.database().ref('notifications/' + player);
+  newTokenEntry = '{"' + devicename + '":"' + token + '"}';
+  var deviceUpdate = jQuery.parseJSON(newTokenEntry);
+  console.log(deviceUpdate);
+  dbRefNotifications.update(deviceUpdate);
+}
+
+
 /////Helper Functions
 function sortingObject(timestamp, inputObject) {
     // Create an array of keys and timestamps that will be sorted
@@ -1466,8 +1635,11 @@ function pageBuilder() {
         authDomain: "project-985851437142041413.firebaseapp.com",
         databaseURL: "https://project-985851437142041413.firebaseio.com",
         storageBucket: "project-985851437142041413.appspot.com",
+        messagingSenderId: "76547521231"
     };
     firebase.initializeApp(config);
+    messaging = firebase.messaging();
+    notifications();
 }
 
 function makeReady() {
@@ -1560,4 +1732,39 @@ function importJSON() {
     entries = {};
     console.log(entries);
     dbRefSpiele.update(entries);
+}
+
+function timezonefix(){
+  var config = {
+      apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
+      authDomain: "project-985851437142041413.firebaseapp.com",
+      databaseURL: "https://project-985851437142041413.firebaseio.com",
+      storageBucket: "project-985851437142041413.appspot.com",
+  };
+  firebase.initializeApp(config);
+
+  CurrentTime = Math.floor(Date.now());
+  millisecs = 60000;
+  //Create Timebreak between past and future
+  TimeBreak = CurrentTime - (160 * millisecs);
+  var ausgabe = "";
+
+  dbRefWintertime = firebase.database().ref().child('spiele');
+  dbRefWintertime = dbRefWintertime.orderByChild('timestamp');
+  dbRefWintertime = dbRefWintertime.endAt(1490493600000);
+  dbRefWintertime.on('value', function(snapshot) {
+      winterGames = snapshot.val();
+      var options = {};
+      options.timeZone = 'Europe/Amsterdam';
+      options.timeZoneName = 'short';
+      for (var i in winterGames){
+        oldtime = winterGames[i]['timestamp'];
+        newtime = oldtime + (60 * millisecs);
+        ausgabe += new Date(oldtime).toLocaleString('de-DE',options) + " | " + new Date(newtime).toLocaleString() + "<br>";
+      }
+
+      document.getElementById('ausgabe').innerHTML = ausgabe;
+
+  });
+
 }
