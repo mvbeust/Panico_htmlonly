@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 26-10-2016: v1.013
+# 01-12-2016: v1.03
 
 # Explicitly cached entries
 /css/materializenew.min.css
@@ -16,16 +16,12 @@ NETWORK:
 
 # Additional resources to cache
 CACHE:
-/css/animate.min.css
-
 /js/jquery.min.js
 /js/firebase.js
 /js/stay_standalone.js
-/js/materialize.min.js
 /js/isotope.pkgd.min.js
 /js/jquery.min.js
 /js/moment.min.js
-/js/de.js
 
 /inc/navigation.html
 /inc/footer.html
@@ -33,15 +29,4 @@ CACHE:
 /archiv/index.html
 /tabelle/index.html
 /tipps/index.html
-
-/img/materializecss.png
-/img/twitter.png
-/img/maxvonbeust.png
-/img/logonav.png
-/img/logo128.png
-favicon.ico
-/fonts/icons/MaterialIcons-Regular.woff2
-/fonts/roboto/Roboto-Bold.woff2
-/fonts/roboto/Roboto-Medium.woff2
-/fonts/roboto/Roboto-Light.woff2
-/fonts/roboto/Roboto-Regular.woff2
+/notifications/index.html

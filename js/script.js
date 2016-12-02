@@ -163,19 +163,19 @@ function TippsPageBuilder() {
     makeReady();
 }
 
-function notificationsPageBuilder(){
-  //Build page for notification management
-  if (navigator.onLine) {
-      pageBuilder();
-      if (('showNotification' in ServiceWorkerRegistration.prototype)) {
-          console.log('Notifications are supported.');
-          notificationIDhandling();
-      }else{
-        html = '';
-        html += '<span class="card-title">Notifications not supported</span>';
-        html += 'Notifications werden leider in diesem Browser nicht unterstützt. Auf iOS Geräten gibt es diese Option leider in keinem Browser.<br><br>Auf anderen Geräten sollten Chrome, Firefox oder Browser basierend auf diesen Systemen funktionieren.'
-        document.getElementById('id').innerHTML = html;
-      }
+function notificationsPageBuilder() {
+    //Build page for notification management
+    if (navigator.onLine) {
+        pageBuilder();
+        if (('showNotification' in ServiceWorkerRegistration.prototype)) {
+            console.log('Notifications are supported.');
+            notificationIDhandling();
+        } else {
+            html = '';
+            html += '<span class="card-title">Notifications not supported</span>';
+            html += 'Notifications werden leider in diesem Browser nicht unterstützt. Auf iOS Geräten gibt es diese Option leider in keinem Browser.<br><br>Auf anderen Geräten sollten Chrome, Firefox oder Browser basierend auf diesen Systemen funktionieren.'
+            document.getElementById('id').innerHTML = html;
+        }
     }
     makeReady();
 }
@@ -243,7 +243,7 @@ function AddGamesbuildingHTML(allGames) {
             }
             if (j == "hinspiel") {
                 if (item["art"] == "Hinspiel") {
-                  console.log(useID);
+                    console.log(useID);
                 }
             }
         }
@@ -269,8 +269,7 @@ function autoCompletes(inputselection) {
             inputselection = "mannschaft";
         }
     }
-    if (inputselection == "hinspiel") {
-    } else {
+    if (inputselection == "hinspiel") {} else {
         //Autocomplete list is requested from database
         dbResources = firebase.database().ref('resources/' + inputselection);
         dbResources.on('value', function(snapshot) {
@@ -434,10 +433,10 @@ function createformTippen(CurrentGames, CurrentTime) {
             //card is opened
             cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
             cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
-            cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
-            cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
+            cards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft1']] + '.webp"><img src="' + dbMannschaft[item['mannschaft1']] + '.png" height= "14px" /></picture>' + item['mannschaft1'] + '</p>';
+            cards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft2" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft2']] + '.webp"><img src="' + dbMannschaft[item['mannschaft2']] + '.png" height= "14px" /></picture>' + item['mannschaft2'] + '</p>';
             cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
-            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999" id="'+useID+'notesfield"></p>';
+            cards += '<p style="font-size:smaller; font-weight:inherit; color:#999" id="' + useID + 'notesfield"></p>';
             if (countTipps != countPlayers) {
                 m1 = item['mannschaft1'];
                 m2 = item['mannschaft2'];
@@ -572,13 +571,13 @@ function changeWinnerSelect(useID, m1, m2, art) {
                     } else if (scoreMannschaft1 < scoreMannschaft2) {
                         winnerSelect.value = m2;
                     } else if (scoreMannschaft1 == scoreMannschaft2) {
-                      //Wenn das Rückspiel ein Unentschieden war
+                        //Wenn das Rückspiel ein Unentschieden war
                         if (hinspielScoreM1 > hinspielScoreM2) {
                             winnerSelect.value = m1;
                         } else if (hinspielScoreM1 < hinspielScoreM2) {
                             winnerSelect.value = m2;
                         } else if (hinspielScoreM1 == hinspielScoreM2) {
-                          //Wenn das Hinspiel auch ein Unentschieden war
+                            //Wenn das Hinspiel auch ein Unentschieden war
                             if (scoreMannschaft2 > hinspielScoreM1) {
                                 winnerSelect.value = m2;
                             } else if (scoreMannschaft2 < hinspielScoreM1) {
@@ -586,10 +585,10 @@ function changeWinnerSelect(useID, m1, m2, art) {
                             }
                         }
                     }
-                    if((scoreMannschaft1 == hinspielScoreM1) && (scoreMannschaft2 == hinspielScoreM2)){
-                      document.getElementById(useID + 'Length').value = "11er";
-                    }else if (document.getElementById(useID + 'Length').value == "11er"){
-                      document.getElementById(useID + 'Length').value = "90";
+                    if ((scoreMannschaft1 == hinspielScoreM1) && (scoreMannschaft2 == hinspielScoreM2)) {
+                        document.getElementById(useID + 'Length').value = "11er";
+                    } else if (document.getElementById(useID + 'Length').value == "11er") {
+                        document.getElementById(useID + 'Length').value = "90";
                     }
                     $('#' + useID + 'Length').material_select();
                     $('#' + useID + 'Winner').material_select();
@@ -608,13 +607,13 @@ function changeWinnerSelect(useID, m1, m2, art) {
             } else if (scoreMannschaft1 < scoreMannschaft2) {
                 winnerSelect.value = m2;
             }
-            if (scoreMannschaft1 == scoreMannschaft2){
-               document.getElementById(useID + 'Length').value = "11er";
-            }else if (document.getElementById(useID + 'Length').value == "11er"){
-              document.getElementById(useID + 'Length').value = "90";
-            }else if((scoreMannschaft1 > 0 || scoreMannschaft2 > 0) && (document.getElementById(useID + 'Length').value == "")){
-              console.log(document.getElementById(useID + 'Length').value);
-              document.getElementById(useID + 'Length').value = "90";
+            if (scoreMannschaft1 == scoreMannschaft2) {
+                document.getElementById(useID + 'Length').value = "11er";
+            } else if (document.getElementById(useID + 'Length').value == "11er") {
+                document.getElementById(useID + 'Length').value = "90";
+            } else if ((scoreMannschaft1 > 0 || scoreMannschaft2 > 0) && (document.getElementById(useID + 'Length').value == "")) {
+                console.log(document.getElementById(useID + 'Length').value);
+                document.getElementById(useID + 'Length').value = "90";
             }
             $('#' + useID + 'Length').material_select();
             $('#' + useID + 'Winner').material_select();
@@ -937,7 +936,7 @@ function monthTable(allPlayersScores, month) {
 
     dbRefCurrentMonthGames.on('value', function(snapshot) {
         CurrentMonthGames = snapshot.val();
-       //label the specified month
+        //label the specified month
         label = monthLabels[new Date().getMonth() + month];
         calcMonthPoints(CurrentMonthGames, allPlayersScores, label);
     });
@@ -1243,15 +1242,15 @@ function pastGamesBuilder(pastGamesDB) {
                         if (dbPlayers[j][useID]) {
                             countTipps += 1;
                             //create playersline for table
-                            namePlayersLine += "<th style='"+addstyle+"'>" + j + "</th>";
-                            tippPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
+                            namePlayersLine += "<th style='" + addstyle + "'>" + j + "</th>";
+                            tippPlayersLine += '<td style="' + addstyle + '">' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
                             if (dbPlayers[j][useID].length == "") {
-                                lengthPlayersLine += '<td style="'+addstyle+'font-size:smaller;">Non-Tipp</td>';
+                                lengthPlayersLine += '<td style="' + addstyle + 'font-size:smaller;">Non-Tipp</td>';
                                 nonTippAdded = true;
                             } else {
-                                lengthPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].length + '</td>';
+                                lengthPlayersLine += '<td style="' + addstyle + '">' + dbPlayers[j][useID].length + '</td>';
                             }
-                            winnerPlayersLine += '<td style="'+addstyle+'font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
+                            winnerPlayersLine += '<td style="' + addstyle + 'font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
                             n = dbPlayers[j][useID].totalpoints;
 
                             if (nonTippAdded == false && dbPlayers[j][useID].nontipp) {
@@ -1259,16 +1258,16 @@ function pastGamesBuilder(pastGamesDB) {
                             } else {
                                 nontippInfo = "";
                             }
-                            pointsPlayersLine += '<td style="'+addstyle+'border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
+                            pointsPlayersLine += '<td style="' + addstyle + 'border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
                         }
                     }
                     namePlayersLine += "</thead></tr>";
-                    if (countTipps == countPlayers  || CurrentTime > item['timestamp']) {
+                    if (countTipps == countPlayers || CurrentTime > item['timestamp']) {
                         //Checks if every player has submitted a tipp and then proceeds to create card
                         cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
                         cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
-                        cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
-                        cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
+                        cards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft1']] + '.webp"><img src="' + dbMannschaft[item['mannschaft1']] + '.png" height= "14px" /></picture>' + item['mannschaft1'] + '</p>';
+                        cards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft2" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft2']] + '.webp"><img src="' + dbMannschaft[item['mannschaft2']] + '.png" height= "14px" /></picture>' + item['mannschaft2'] + '</p>';
                         cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr</p>';
                         finalscores = false;
                         if (dbScores[useID]) {
@@ -1363,15 +1362,15 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
                         if (dbPlayers[j][useID]) {
                             countTipps += 1;
                             //create playersline for table
-                            namePlayersLine += "<th style='"+addstyle+"'>" + j + "</th>";
-                            tippPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
+                            namePlayersLine += "<th style='" + addstyle + "'>" + j + "</th>";
+                            tippPlayersLine += '<td style="' + addstyle + '">' + dbPlayers[j][useID].scoreM1 + ':' + dbPlayers[j][useID].scoreM2 + '</td>';
                             if (dbPlayers[j][useID].length == "") {
-                                lengthPlayersLine += '<td style="'+addstyle+'font-size:smaller;">Non-Tipp</td>';
+                                lengthPlayersLine += '<td style="' + addstyle + 'font-size:smaller;">Non-Tipp</td>';
                                 nonTippAdded = true;
                             } else {
-                                lengthPlayersLine += '<td style="'+addstyle+'">' + dbPlayers[j][useID].length + '</td>';
+                                lengthPlayersLine += '<td style="' + addstyle + '">' + dbPlayers[j][useID].length + '</td>';
                             }
-                            winnerPlayersLine += '<td style="'+addstyle+'font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
+                            winnerPlayersLine += '<td style="' + addstyle + 'font-size:smaller;">' + dbPlayers[j][useID].winner + '</td>';
                             n = dbPlayers[j][useID].totalpoints;
 
                             if (nonTippAdded == false && dbPlayers[j][useID].nontipp) {
@@ -1379,7 +1378,7 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
                             } else {
                                 nontippInfo = "";
                             }
-                            pointsPlayersLine += '<td style="'+addstyle+'border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
+                            pointsPlayersLine += '<td style="' + addstyle + 'border-top: 1px solid #d0d0d0">' + (n <= 0 ? '' : '+') + n + nontippInfo + '</td>';
                         }
                     }
                     namePlayersLine += "</thead></tr>";
@@ -1387,8 +1386,8 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
                         //Checks if every player has submitted a tipp and then proceeds to create card
                         futurecards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
                         futurecards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
-                        futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
-                        futurecards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
+                        futurecards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft1']] + '.webp"><img src="' + dbMannschaft[item['mannschaft1']] + '.png" height= "14px" /></picture>' + item['mannschaft1'] + '</p>';
+                        futurecards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft2" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft2']] + '.webp"><img src="' + dbMannschaft[item['mannschaft2']] + '.png" height= "14px" /></picture>' + item['mannschaft2'] + '</p>';
                         futurecards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
                         finalscores = false;
                         if (dbScores[useID]) {
@@ -1440,22 +1439,22 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
 
 /////Notifications
 function notifications() {
-  //What happens when a notification is being received when the site is open
-  //otherwise this will be handled by the serviceworker
-        messaging.onMessage(function(payload) {
-            console.log(payload);
-        });
-        messaging.onTokenRefresh(function() {
-            messaging.getToken()
-                .then(function(refreshedToken) {
-                    var username = localStorage.getItem('username');
-                    var devicename = localStorage.getItem('devicename');
-                    console.log('Token refreshed.');
-                    // Indicate that the new Instance ID token has not yet been sent to the
-                    // Send Instance ID token to app server.
-                    notificationTokenServer(refreshedToken, username, devicename);
-                })
-        });
+    //What happens when a notification is being received when the site is open
+    //otherwise this will be handled by the serviceworker
+    messaging.onMessage(function(payload) {
+        console.log(payload);
+    });
+    messaging.onTokenRefresh(function() {
+        messaging.getToken()
+            .then(function(refreshedToken) {
+                var username = localStorage.getItem('username');
+                var devicename = localStorage.getItem('devicename');
+                console.log('Token refreshed.');
+                // Indicate that the new Instance ID token has not yet been sent to the
+                // Send Instance ID token to app server.
+                notificationTokenServer(refreshedToken, username, devicename);
+            })
+    });
 
 }
 
@@ -1468,7 +1467,7 @@ function notificationSetup() {
     console.log(player);
     console.log(devicename);
     if (player == "" || devicename == "") {
-      console.log("Values not provided");
+        console.log("Values not provided");
     } else {
         //Save Values to Local Storage
         localStorage.setItem('username', player);
@@ -1513,34 +1512,34 @@ function notificationSignup() {
     });
 }
 
-function notificationsSetting(){
-  //Settings are shown if the device is already registered
-  var player = localStorage.getItem('username');
-  dbRefNotifications = firebase.database().ref('notifications/' + player);
-  dbRefNotifications.on('value', function(snapshot) {
-      notificationDevices = snapshot.val();
-      html = '';
-      html += '<span class="card-title">Settings</span>';
-      html += '<table><tbody>';
-      for (var j in notificationDevices) {
-          html += "<tr>";
-          html += "<td>" + j + "</td>";
-          passID = "'"+ j + "'";
-          html += '<td><input class="btn" name="deleteshow' + j + '" type="submit" value="Delete" id="deleteshow' + j + '" onclick="showDeleteButton('+passID+')" /><input class="btn red" style="display: none;" name="reallydelete' + j + '" id="reallydelete' + j + '" type="submit" value="Really?" onclick="deleteDevice(' + passID + ')"/></td>';
-          html += "</tr>"
-      }
-      html += "</tbody></table>"
-      document.getElementById('id').innerHTML = html;
-  });
+function notificationsSetting() {
+    //Settings are shown if the device is already registered
+    var player = localStorage.getItem('username');
+    dbRefNotifications = firebase.database().ref('notifications/' + player);
+    dbRefNotifications.on('value', function(snapshot) {
+        notificationDevices = snapshot.val();
+        html = '';
+        html += '<span class="card-title">Settings</span>';
+        html += '<table><tbody>';
+        for (var j in notificationDevices) {
+            html += "<tr>";
+            html += "<td>" + j + "</td>";
+            passID = "'" + j + "'";
+            html += '<td><input class="btn" name="deleteshow' + j + '" type="submit" value="Delete" id="deleteshow' + j + '" onclick="showDeleteButton(' + passID + ')" /><input class="btn red" style="display: none;" name="reallydelete' + j + '" id="reallydelete' + j + '" type="submit" value="Really?" onclick="deleteDevice(' + passID + ')"/></td>';
+            html += "</tr>"
+        }
+        html += "</tbody></table>"
+        document.getElementById('id').innerHTML = html;
+    });
 
 }
 
-function deleteDevice(devicename){
-  //when user wants to manually remove device
-  console.log(devicename);
-  var username = localStorage.getItem('username');
-  dbRefRemoveLine = firebase.database().ref('notifications/' + username +'/' + devicename);
-  dbRefRemoveLine.remove();
+function deleteDevice(devicename) {
+    //when user wants to manually remove device
+    console.log(devicename);
+    var username = localStorage.getItem('username');
+    dbRefRemoveLine = firebase.database().ref('notifications/' + username + '/' + devicename);
+    dbRefRemoveLine.remove();
 }
 
 function notificationIDhandling() {
@@ -1574,13 +1573,13 @@ function notificationIDhandling() {
     });
 }
 
-function notificationTokenServer(token, player, devicename){
-  console.log(token);
-  dbRefNotifications = firebase.database().ref('notifications/' + player);
-  newTokenEntry = '{"' + devicename + '":"' + token + '"}';
-  var deviceUpdate = jQuery.parseJSON(newTokenEntry);
-  console.log(deviceUpdate);
-  dbRefNotifications.update(deviceUpdate);
+function notificationTokenServer(token, player, devicename) {
+    console.log(token);
+    dbRefNotifications = firebase.database().ref('notifications/' + player);
+    newTokenEntry = '{"' + devicename + '":"' + token + '"}';
+    var deviceUpdate = jQuery.parseJSON(newTokenEntry);
+    console.log(deviceUpdate);
+    dbRefNotifications.update(deviceUpdate);
 }
 
 
@@ -1640,6 +1639,11 @@ function pageBuilder() {
     firebase.initializeApp(config);
     messaging = firebase.messaging();
     notifications();
+    if (navigator.serviceWorker) {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            console.log('ServiceWorker registration successful with scope:', registration.scope);
+        });
+    }
 }
 
 function makeReady() {
@@ -1709,13 +1713,20 @@ function getResources() {
     };
     firebase.initializeApp(config);
 
-    dbResources = firebase.database().ref('resources/mannschaft');
-    dbResources.on('value', function(snapshot) {
+    dbResourcesRef = firebase.database().ref('resources/mannschaft');
+    dbResourcesRef.once('value').then(function(snapshot) {
         dbResources = snapshot.val();
         html = "";
+        newurldata = {};
         for (var j in dbResources) {
-            html += j + '<br>';
+            html += '/img/clubs/' + dbResources[j].slice(46).slice(0, -4) + '<br>';
+            newurldata[j] = '/img/clubs/' + dbResources[j].slice(46).slice(0, -4);
+            //newurldata += '"' +  j + '":"' + newurl + '",';
         }
+        //newurldata += '}';
+        //var newurldata = jQuery.parseJSON(newurldata);
+        console.log(newurldata);
+        //dbResourcesRef.update(newurldata);
         document.getElementById('ausgabe').innerHTML = html;
     });
 }
@@ -1734,37 +1745,52 @@ function importJSON() {
     dbRefSpiele.update(entries);
 }
 
-function timezonefix(){
-  var config = {
-      apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
-      authDomain: "project-985851437142041413.firebaseapp.com",
-      databaseURL: "https://project-985851437142041413.firebaseio.com",
-      storageBucket: "project-985851437142041413.appspot.com",
-  };
-  firebase.initializeApp(config);
+function timezonefix() {
+    var config = {
+        apiKey: "AIzaSyB2ycmW4sCSMm6py_NGdjtE77CGFM2PvGQ",
+        authDomain: "project-985851437142041413.firebaseapp.com",
+        databaseURL: "https://project-985851437142041413.firebaseio.com",
+        storageBucket: "project-985851437142041413.appspot.com",
+    };
+    firebase.initializeApp(config);
 
-  CurrentTime = Math.floor(Date.now());
-  millisecs = 60000;
-  //Create Timebreak between past and future
-  TimeBreak = CurrentTime - (160 * millisecs);
-  var ausgabe = "";
+    CurrentTime = Math.floor(Date.now());
+    millisecs = 60000;
+    //Create Timebreak between past and future
+    TimeBreak = CurrentTime - (160 * millisecs);
+    var ausgabe = "";
 
-  dbRefWintertime = firebase.database().ref().child('spiele');
-  dbRefWintertime = dbRefWintertime.orderByChild('timestamp');
-  dbRefWintertime = dbRefWintertime.endAt(1490493600000);
-  dbRefWintertime.on('value', function(snapshot) {
-      winterGames = snapshot.val();
-      var options = {};
-      options.timeZone = 'Europe/Amsterdam';
-      options.timeZoneName = 'short';
-      for (var i in winterGames){
-        oldtime = winterGames[i]['timestamp'];
-        newtime = oldtime + (60 * millisecs);
-        ausgabe += new Date(oldtime).toLocaleString('de-DE',options) + " | " + new Date(newtime).toLocaleString() + "<br>";
-      }
+    dbRefWintertime = firebase.database().ref().child('spiele');
+    dbRefWintertime = dbRefWintertime.orderByChild('timestamp');
+    dbRefWintertime = dbRefWintertime.endAt(1490493600000);
+    dbRefWintertime.on('value', function(snapshot) {
+        winterGames = snapshot.val();
+        var options = {};
+        options.timeZone = 'Europe/Amsterdam';
+        options.timeZoneName = 'short';
+        for (var i in winterGames) {
+            oldtime = winterGames[i]['timestamp'];
+            newtime = oldtime + (60 * millisecs);
+            ausgabe += new Date(oldtime).toLocaleString('de-DE', options) + " | " + new Date(newtime).toLocaleString() + "<br>";
+        }
 
-      document.getElementById('ausgabe').innerHTML = ausgabe;
+        document.getElementById('ausgabe').innerHTML = ausgabe;
 
-  });
+    });
 
 }
+
+//////Stay Standalone
+if (("standalone" in window.navigator) && window.navigator.standalone) {
+    var noddy, remotes = false;
+    document.addEventListener("click", function(a) {
+        noddy = a.target;
+        while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
+            noddy = noddy.parentNode
+        }
+        if ("href" in noddy && noddy.href.indexOf("http") !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes)) {
+            a.preventDefault();
+            document.location.href = noddy.href
+        }
+    }, false)
+};

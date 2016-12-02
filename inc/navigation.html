@@ -11,14 +11,19 @@
                     <li class="waves-effect waves-indigo"><a href="/tabelle">Tabelle</a></li>
                     <li class="waves-effect waves-indigo"><a href="/tipps">Tipps</a></li>
                     <li class="waves-effect waves-indigo" style="height:64px"><a href="/addgames"><i class="material-icons">add_circle</i></a></li>
-                    <li class="waves-effect waves-indigo hide" style="height:64px" id="notificationdesktop"><a href="/notifications"><i class="material-icons">notifications_none</i></a></li>
+                    <li class="waves-effect waves-indigo" style="height:64px" id="notificationdesktop"><a href="/notifications"><i class="material-icons">notifications_none</i></a></li>
                     <li class="waves-effect waves-indigo" style="height:64px"><a href="javascript:history.go(0)"><i class="material-icons">refresh</i></a></li>
                 </ul>
             </div>
             <!--Mobile Navigation-->
             <ul class="side-nav" id="mobile-demo">
                 <li class="bold" style="border-bottom:solid; border-bottom-color:#D0D0D0; border-bottom-width:1px; background: #D0D0D0">
-                    <a href="javascript:history.go(0)" style="padding-left: 99px;padding-top: 30px;height: 112px;"><img height="50px" src="/img/logonav.png" /></a>
+                    <a href="javascript:history.go(0)" style="padding-left: 99px;padding-top: 30px;height: 112px;">
+                        <picture height="50px">
+                            <source type="image/webp" srcset="/img/logonav.webp">
+                            <img height="50px" src="/img/logonav.png" />
+                        </picture>
+                    </a>
                 </li>
                 <div class="waves-effect">
                     <a href="/" style="padding:0px">
@@ -35,7 +40,7 @@
                         <li style="font-weight: bold; width:250px; padding-left:30px; border-bottom:solid; border-bottom-color:#D0D0D0; border-bottom-width:1px;">Tipps anzeigen</li>
                     </a>
                 </div>
-                <div class="waves-effect hide" id="notificationmobile">
+                <div class="waves-effect" id="notificationmobile">
                     <a href="/notifications" style="color:#D0D0D0; padding:0px">
                         <li style="font-weight: bold; width:250px; padding-left:30px">Notifications</li>
                     </a>
