@@ -16,7 +16,6 @@
     <link rel="icon" sizes="228x228" href="/img/logo.png">
     <link rel="apple-touch-icon-precomposed" href="/img/apple-touch-icon.png">
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
-    <link rel="stylesheet" href="/css/animate.min.css">
     <link href="http://www.panicotippspiel.com/feed" rel="alternate" type="application/rss+xml" title="Panicotippspiel News" />
 
     <!--Mobile Optimierungen-->
@@ -32,7 +31,6 @@
     <!--MS Optimizations-->
     <meta name="msapplication-TileImage" content="/logo.png">
     <meta name="msapplication-TileColor" content="#3f51b5">
-    <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
 </head>
 
 <body onload="ArchivPageBuilder()">
@@ -72,13 +70,13 @@
             <li>
                 <div class="collapsible-header"><i class="material-icons">people_outline</i>Was passiert bei Punktegleichheit?</div>
                 <div class="collapsible-body" style="background-color:#F5F5F5">
-                    <p>Es erhalten beide Spieler Panico. Es kann mehr als einen ersten Platz geben und folglich auch mehr als einen zweiten Platz geben.</p>
+                    <p>Es erhalten beide Spieler Panico. Es kann mehr als einen ersten Platz geben und folglich auch mehr als einen zweiten Platz geben. Das heißt auch, dass keine Plätze verloren gehen, weshalb es auch dann einen zweiten Platz geben wird, wenn sich mehrere Personen den ersten Platz teilen.</p>
                 </div>
             </li>
             <li>
                 <div class="collapsible-header"><i class="material-icons">access_time</i>Wann werden Panico vergeben?</div>
                 <div class="collapsible-body" style="background-color:#F5F5F5">
-                    <p>Immer am Ende des Monats.</p>
+                    <p>Immer am Ende des Monats (Nach GMT+2, also römischer Sommerzeit).</p>
                 </div>
             </li>
         </ul>
@@ -95,7 +93,7 @@
                         +Bonus f&#252;r richtigen Sieger</br>
                         =Summe ergibt Gesamtpunktzahl f&#252;r den Monat
                         <br>
-                        <br> Zum Anfang eines jeden Monats wird eine neue Monatstabelle gestartet. Entscheidend für den Monatsbeginn ist die koordinierte Weltzeit (d.h. Winterzeit in Greenwich/UK).</p>
+                        <br> Zum Anfang eines jeden Monats wird eine neue Monatstabelle gestartet. Entscheidend für den Monatsbeginn ist die Sommerzeit in Rom/Italien (GMT+2).</p>
                 </div>
             </li>
             <li>
@@ -143,25 +141,24 @@
             <li>
                 <div class="collapsible-header"><i class="material-icons">timelapse</i>Ab wann und bis wann kann ich tippen?</div>
                 <div class="collapsible-body" style="background-color:#F5F5F5">
-                    <p> Man kann 9 Tage vor Spieltag tippen (angenommen, es sind maximal acht Spiele in den n&#228;chsten 8 Tagen) und kann bis zwei Minuten vor Anpfiff tippen.</br>
-                        Es gilt immer nur der erste Tipp. Tipps k&#246;nnen auch vor Anpfiff nicht ver&#228;ndert werden.
+                    <p> Man kann 9 Tage vor Spieltag tippen und kann bis Anpfiff tippen - danach werden keine Tipps mehr akzeptiert, auch wenn das Tippspiel vorher geöffnet worden ist.</br>
+                        Du kannst deine Tipps so lange verändern, wie nicht alle getippt haben (oder ein Spiel angepfiffen wurde).
                         <br>
-                        <br>Das Tippspiel zeigt an, wie lange man noch tippen kann. Diese Angabe ist abhängig von der Zeitzone in der man sich befindet. Die Angabe wann das Spiel stattfindet, bezieht sich immer auf die Zeit in Zentraleuropa, damit klar ist,
-                        in welche Monatswertung das Spiel eingeht.</p>
+                        <br>Das Tippspiel zeigt an, wie lange man noch tippen kann.</p>
                 </div>
             </li>
             <li>
                 <div class="collapsible-header"><i class="material-icons">language</i>Ich bin in einer anderen Zeitzone. Was jetzt?</div>
                 <div class="collapsible-body" style="background-color:#F5F5F5">
-                    <p>Es ändert sich nichts. Ausschlaggebend für die Zuordnung der Punkte zu den Monaten ist Zeit in Deutschland/Italien.
-                        <br> Das Tippspiel ist so nett und zeigt dir die Spiele aber für deine Zeitzone an. Wenn du auf diese Zeit klickst, siehst du die Anpfiffzeit in deutscher Zeit und erhälst Auskunft darüber, für welchen Monat das Spiel zählt.</p>
+                    <p>Es ändert sich nichts. Ausschlaggebend für die Zuordnung der Punkte zu den Monaten ist die Sommerzeit in Deutschland/Italien.
+                        <br> Das Tippspiel ist so nett und zeigt dir die Spiele aber für deine Zeitzone an.</p>
                 </div>
             </li>
             <li>
                 <div class="collapsible-header"><i class="material-icons">snooze</i>Was passiert, wenn ich einen Tipp vergesse?</div>
                 <div class="collapsible-body" style="background-color:#F5F5F5">
                     <p> Das ist nat&#252;rlich &#228;rgerlich. Erstmal wird dir ein Punkt abgezogen, dann tippt das Spiel automatisch ein 0:0 f&#252;r dich. Das Spiel wird in ko-Spielen automatisch einen Sieger f&#252;r einen tippen. Man kann sich also den
-                        Bonus f&#252;r den Sieger, wenn das Spiel l&#228;nger als 90mins ist, ergaunern.  </p>
+                        Bonus f&#252;r den Sieger ergaunern.  </p>
                 </div>
             </li>
             <li>
@@ -195,7 +192,8 @@
             <li>
                 <div class="collapsible-header" id="notifications"><i class="material-icons">notifications</i>Gibt es Notifications für das Tippspiel?</div>
                 <div class="collapsible-body" style="background-color:#F5F5F5">
-                    <p>Nein, nicht mehr.</p>
+                    <p>Ja, inzwischen gibt diese Möglichkeit wieder. Allerdings wird die Funktion nur von Chrome, Firefox und Edge unterstützt. iOS und Safari unterstützen die Technologie leider (noch) nicht. <br>
+                    <a href="/notifications">Hier geht's zu den Einstellungen</a></p>
             </li>
             <li>
                 <div class="collapsible-header" id="kalender"><i class="material-icons">event</i>Kann ich das Tippspiel zu meinem Kalender hinzufügen?</div>
@@ -221,11 +219,12 @@
             </div>
         </div>
     </main>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/script.min.js"></script>
-    <script src="/js/materialize.min.js"></script>
     <footer id="footer" class="page-footer hide-on-med-and-down">
     </footer>
 </body>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/script.min.js"></script>
+<script src="/js/firebase.js"></script>
 
 </html>
