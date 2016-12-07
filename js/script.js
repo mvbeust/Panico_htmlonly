@@ -649,8 +649,8 @@ function createformErgebnis(ErgebnisGames, CurrentTime) {
             //card is opened
             cards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
             cards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
-            cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft1']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft1'] + '</p>';
-            cards += '<p style="font-size:larger; font-weight:bold"><img src="' + dbMannschaft[item['mannschaft2']] + '" alt="Mannschaft1" class="circle responsive-img" style="height: 14px; margin-right: 7px;" />' + item['mannschaft2'] + '</p>';
+            cards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft1']] + '.webp"><img src="' + dbMannschaft[item['mannschaft1']] + '.png" height= "14px" /></picture>' + item['mannschaft1'] + '</p>';
+            cards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft2" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft2']] + '.webp"><img src="' + dbMannschaft[item['mannschaft2']] + '.png" height= "14px" /></picture>' + item['mannschaft2'] + '</p>';
             cards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + ' am ' + new Date(item['timestamp']).toLocaleDateString() + ' um ' + new Date(item['timestamp']).toLocaleTimeString() + ' Uhr</p>';
             cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M1" type="number" class="validate"><label for="' + useID + 'M1">Heim</label></div>';
             cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M2" type="number" class="validate"><label for="' + useID + 'M2">Gast</label></div>';
@@ -902,7 +902,7 @@ function tabelleBuilder(allPlayersScores) {
     //Calc Table for current Month
     month = 1;
     onedayArray(allPlayersScores, 24);
-    monthTable(allPlayersScores, month);
+    //  monthTable(allPlayersScores, month);
     if (new Date() > new Date("2016-09-01")) {
         //Calc Table for last month
         month = 0;
@@ -991,17 +991,23 @@ function createSubtables() {
         "August": 1
     };
     dbRefTable = firebase.database().ref('table/month');
+    test = 0;
     dbRefTable.on('value', function(snapshot) {
         subtables = snapshot.val();
+        test += 1;
+        if(test > 1){
+          return;
+        }
         monthlytableHTML = '';
         monthNumber = 0;
         var entry = {};
         monthlytableHTML += ' <ul class="collapsible" data-collapsible="expandable" style="background-color:#eeeeee">';
+        console.log(subtables);
         for (i in sortedMonths) {
             //A loop is created over all months (in the right order for the game)
             singleSubtable = subtables[sortedMonths[i]]; //Every month is isolated
             if (subtables[sortedMonths[i]]) {
-                monthNumber += 1; //Is a month is in the database a new month is counted
+                monthNumber += 1; //If a month is in the database a new month is counted
                 var monthtable = [];
                 for (p in singleSubtable) {
                     //The Data for every player is entered into an array
