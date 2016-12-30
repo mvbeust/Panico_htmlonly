@@ -905,6 +905,8 @@ function tabelleBuilder(allPlayersScores) {
     //  monthTable(allPlayersScores, month);
     if (new Date() > new Date("2016-09-01")) {
         //Calc Table for last month
+        month = 1;
+        monthTable(allPlayersScores, month);
         month = 0;
         monthTable(allPlayersScores, month);
     }
@@ -920,12 +922,18 @@ function monthTable(allPlayersScores, month) {
     }
     //get all games that are in the specified month
     currentMonth = new Date().getMonth() + month;
+    if (currentMonth < 13 && currentMonth > 9){
+      currentYear = "2016-";
+    }else{
+      currentYear = "2017-";
+    }
 
     if (currentMonth < 10) {
         currentMonth = "0" + currentMonth;
     }
-    currentMonth = new Date("2016-" + currentMonth + "-01T00:00:00+02:00");
+    currentMonth = new Date(currentYear + currentMonth + "-01T00:00:00+00:00");
     //get first and late point in time of specified month
+    console.log(currentMonth);
     currentMonth = monthStartEnd(currentMonth);
     console.log(currentMonth[1]);
 
@@ -951,6 +959,7 @@ function monthTable(allPlayersScores, month) {
 function calcMonthPoints(CurrentMonthGames, allPlayersScores, label) {
     //This function calculates the points of every player in every month and submits them to the database
     var table = {};
+    console.log(CurrentMonthGames);
     for (var p in allPlayersScores) {
         //Looping over all Players
         var singlePlayerScores = allPlayersScores[p];
@@ -967,6 +976,7 @@ function calcMonthPoints(CurrentMonthGames, allPlayersScores, label) {
         //Push player and points to object (points are named timestamp just to used the same ordering function and are negative to reverse sorting)
         table[p] = -singlePlayerPoints;
     }
+    console.log(table)
     //Update specified montly table in database
     dbRefTable = firebase.database().ref('table/month/' + label);
     dbRefTable.update(table);
@@ -991,13 +1001,8 @@ function createSubtables() {
         "August": 1
     };
     dbRefTable = firebase.database().ref('table/month');
-    test = 0;
     dbRefTable.on('value', function(snapshot) {
         subtables = snapshot.val();
-        test += 1;
-        if(test > 1){
-          return;
-        }
         monthlytableHTML = '';
         monthNumber = 0;
         var entry = {};
@@ -1643,13 +1648,13 @@ function pageBuilder() {
         messagingSenderId: "76547521231"
     };
     firebase.initializeApp(config);
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(function() {
+            // Success
+        })
+    }
     messaging = firebase.messaging();
     notifications();
-    if (navigator.serviceWorker) {
-        navigator.serviceWorker.register('/sw.js').then(function(registration) {
-            console.log('ServiceWorker registration successful with scope:', registration.scope);
-        });
-    }
 }
 
 function makeReady() {
