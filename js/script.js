@@ -222,7 +222,7 @@ function AddGamesbuildingHTML(allGames) {
     table += '</tr></thead><tbody>';
 
     //Request a sorted array of keys (sorted by game kickoff time)
-    var sortedTimes = sortingObject('timestamp', allGames);
+    var sortedTimes = sortingReverseObject('timestamp', allGames);
     for (var i = 0; i < sortedTimes.length; i++) {
         var useID = sortedTimes[i].key;
         var item = allGames[useID];
@@ -231,8 +231,10 @@ function AddGamesbuildingHTML(allGames) {
             if (j == "length") {
                 lengthforTable = item[j];
                 var lengthforTablePrint = '';
+                lengthoptions = 0;
                 for (var t in lengthforTable) {
                     lengthforTablePrint += lengthforTable[t] + '|';
+                    lengthoptions += 1;
                 }
                 lengthforTablePrint = lengthforTablePrint.substring(0, lengthforTablePrint.length - 1);
                 table += '<td>' + lengthforTablePrint + '</td>';
@@ -241,11 +243,23 @@ function AddGamesbuildingHTML(allGames) {
             } else if (j == "oldtimestamp") {} else {
                 table += '<td>' + item[j] + '</td>';
             }
-            if (j == "hinspiel") {
-                if (item["art"] == "Hinspiel") {
-                    console.log(useID);
-                }
-            }
+        }
+        //Check if a game that is a ko Game has more than one length Option
+        if (item["fortschritt"] != "Normal" && lengthoptions < 2) {
+            console.log(useID + " Länge fehlt!");
+            item.length = {"90":"90","120":"120","11er":"11er"};
+            entry={};
+            entry[useID] = item;
+            console.log(entry);
+            dbRefSpiele.update(entry);
+        }
+        if(item.art == "Rückspiel"){
+          if(item.hinspiel){
+            //Hinspiel ist eingetragen
+          }else{
+            console.log(useID + "Hinspiel fehlt");
+            console.log(item.mannschaft2.replace(/\W+/g, '') + item.mannschaft1.replace(/\W+/g, ''));
+          }
         }
         passID = "'" + useID + "'";
         table += '<td><input class="btn" name="edit" type="submit" value="Edit" onclick="editGames(allGames,' + passID + ')" /></td>';
@@ -274,7 +288,6 @@ function autoCompletes(inputselection) {
         dbResources = firebase.database().ref('resources/' + inputselection);
         dbResources.on('value', function(snapshot) {
             dbResources = snapshot.val();
-            console.log(dbResources);
             //Required javascript code is generated
             $('input#' + outputSelection).autocomplete({
                 data: dbResources
@@ -445,8 +458,8 @@ function createformTippen(CurrentGames, CurrentTime) {
                 transm1 = "'" + m1 + "'";
                 transm2 = "'" + m2 + "'";
                 transart = "'" + art + "'";
-                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M1" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')"><label for="' + useID + 'M1">Heim</label></div>';
-                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M2" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')"><label for="' + useID + 'M2">Gast</label></div>';
+                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M1" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')" onfocus="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')"><label for="' + useID + 'M1">Heim</label></div>';
+                cards += '<div class="input-field col s6 m6"><input id="' + useID + 'M2" type="number" class="validate" onchange="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')" onfocus="changeWinnerSelect(' + transuseID + ',' + transm1 + ',' + transm2 + ',' + transart + ')"><label for="' + useID + 'M2">Gast</label></div>';
                 //Optionen für Länge werden erstellt
                 length = item['length'];
                 var lengthPrint = '';
@@ -1648,11 +1661,6 @@ function pageBuilder() {
         messagingSenderId: "76547521231"
     };
     firebase.initializeApp(config);
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').then(function() {
-            // Success
-        })
-    }
     messaging = firebase.messaging();
     notifications();
 }
