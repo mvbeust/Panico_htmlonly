@@ -104,7 +104,7 @@ function ArchivPageBuilder() {
 }
 
 function TabellePageBuilder() {
-    //Build page for adding new games
+    //Build page for Table
     if (navigator.onLine) {
         pageBuilder();
         //Get Elements from html
@@ -161,6 +161,28 @@ function TippsPageBuilder() {
         window.location = "/offline.html";
     }
     makeReady();
+}
+
+function StatsPageBuilder(){
+  //Build page for Stats
+  if (navigator.onLine) {
+      pageBuilder();
+      //Get Elements from html
+      mainTable = document.getElementById('mainTable');
+
+      //Sync Data from DB to Website
+      //Create reference
+      dbRefPlayers = firebase.database().ref().child('players');
+
+      //Sync object changes
+      dbRefPlayers.on('value', function(snapshot) {
+          allPlayersScores = snapshot.val();
+          statsInit(allPlayersScores);
+      });
+  } else {
+      window.location = "/offline.html";
+  }
+  makeReady();
 }
 
 function notificationsPageBuilder() {
@@ -598,7 +620,12 @@ function changeWinnerSelect(useID, m1, m2, art) {
                             }
                         }
                     }
-                    if ((scoreMannschaft1 == hinspielScoreM1) && (scoreMannschaft2 == hinspielScoreM2)) {
+                    if ((scoreMannschaft1 < hinspielScoreM2) || (scoreMannschaft2 < hinspielScoreM1)){
+                      //If a game cannot have gone over 90 mins as at least one of the teams didn't score at least as many goals as in the first leg
+                        document.getElementById(useID + 'Length').value = "90";
+                    }
+                    if ((scoreMannschaft1 == hinspielScoreM2) && (scoreMannschaft2 == hinspielScoreM1)) {
+                      //If first and second leg cancel each other out --> 11er
                         document.getElementById(useID + 'Length').value = "11er";
                     } else if (document.getElementById(useID + 'Length').value == "11er") {
                         document.getElementById(useID + 'Length').value = "90";
@@ -933,6 +960,9 @@ function monthTable(allPlayersScores, month) {
         //This is a check that checks if the Season has ended
         return;
     }
+    if (month == 0){
+      month = 12;
+    }
     //get all games that are in the specified month
     currentMonth = new Date().getMonth() + month;
     if (currentMonth < 13 && currentMonth > 9){
@@ -948,7 +978,7 @@ function monthTable(allPlayersScores, month) {
     //get first and late point in time of specified month
     console.log(currentMonth);
     currentMonth = monthStartEnd(currentMonth);
-    console.log(currentMonth[1]);
+    //console.log(currentMonth[1]);
 
     //Request all games in the specified month
     dbRefCurrentMonthGames = firebase.database().ref().child('spiele');
@@ -1407,12 +1437,23 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
                     }
                     namePlayersLine += "</thead></tr>";
                     if (countTipps == countPlayers || CurrentTime > item['timestamp']) {
+                        fortschritt = item['fortschritt'];
+                        if (fortschritt == "Normal") {
+                            fortschritt = "";
+                        } else if (fortschritt.slice(-1) == "e") {
+                            fortschritt = fortschritt.substring(0, fortschritt.length - 1)
+                        }
+                        art = item['art'];
+                        if (art == "Rückspiel") {
+                            hinspiel = item['hinspiel'];
+
+                        }
                         //Checks if every player has submitted a tipp and then proceeds to create card
                         futurecards += '<div class="col s12 m6 grid-item"><div class = "card" style = "background-color:#fff" ><div class = "card-content" >';
                         futurecards += '<span class="badge"><img src="' + dbWettbewerb[item['wettbewerb']] + '" alt="' + item['wettbewerb'] + '" class="responsive-img" style="height:30px"/></span>';
                         futurecards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft1" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft1']] + '.webp"><img src="' + dbMannschaft[item['mannschaft1']] + '.png" height= "14px" /></picture>' + item['mannschaft1'] + '</p>';
                         futurecards += '<p style="font-size:larger; font-weight:bold"><picture alt="Mannschaft2" class="responsive-img" style="height: 14px; margin-right: 7px;" ><source type="image/webp" srcset="' + dbMannschaft[item['mannschaft2']] + '.webp"><img src="' + dbMannschaft[item['mannschaft2']] + '.png" height= "14px" /></picture>' + item['mannschaft2'] + '</p>';
-                        futurecards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + item['fortschritt'] + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
+                        futurecards += '<p style="font-size:smaller; font-weight:inherit; color:#999">' + item['wettbewerb'] + ' ' + fortschritt + ' ' + item['art'] + '<a class="tooltipped" style="color:#999" data-position="bottom" data-delay="50" data-tooltip="' + moment(new Date(item['timestamp'])).format('LLLL') + ' Uhr"> ' + moment(new Date(item['timestamp'])).fromNow() + '</a></p>';
                         finalscores = false;
                         if (dbScores[useID]) {
                             //Checks if there already are final scores for the game
@@ -1460,6 +1501,10 @@ function futureGamesBuilder(futureGamesDB, CurrentTime) {
     });
 }
 
+/////Statistics
+function statsInit(){
+
+}
 
 /////Notifications
 function notifications() {
@@ -1760,6 +1805,7 @@ function importJSON() {
     firebase.initializeApp(config);
     dbRefSpiele = firebase.database().ref().child('spiele');
     entries = {};
+entries["1492263000000TSGHoffenheimBorussiaMönchengladbach"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "TSG Hoffenheim",        "mannschaft2": "Borussia Mönchengladbach",    "timestamp": 1492263000000,      "wettbewerb": "Bundesliga"};entries["1492273800000BayerLeverkusenFCBayernMünchen"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Bayer Leverkusen",        "mannschaft2": "FC Bayern München",    "timestamp": 1492273800000,      "wettbewerb": "Bundesliga"};entries["1492349400000WerderBremenFCSchalke04"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Werder Bremen",        "mannschaft2": "FC Schalke 04",    "timestamp": 1492349400000,      "wettbewerb": "Bundesliga"};entries["1492799400000FCKölnTSGHoffenheim"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "FC Köln",        "mannschaft2": "TSG Hoffenheim",    "timestamp": 1492799400000,      "wettbewerb": "Bundesliga"};entries["1492878600000BorussiaMönchengladbachBorussiaDortmund"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Borussia Mönchengladbach",        "mannschaft2": "Borussia Dortmund",    "timestamp": 1492878600000,      "wettbewerb": "Bundesliga"};entries["1492961400000FCSchalke04RBLeipzig"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "FC Schalke 04",        "mannschaft2": "RB Leipzig",    "timestamp": 1492961400000,      "wettbewerb": "Bundesliga"};entries["1493404200000BayerLeverkusenFCSchalke04"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Bayer Leverkusen",        "mannschaft2": "FC Schalke 04",    "timestamp": 1493404200000,      "wettbewerb": "Bundesliga"};entries["1493483400000VfLWolfsburgFCBayernMünchen"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "VfL Wolfsburg",        "mannschaft2": "FC Bayern München",    "timestamp": 1493483400000,      "wettbewerb": "Bundesliga"};entries["1493566200000TSGHoffenheimEintrachtFrankfurt"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "TSG Hoffenheim",        "mannschaft2": "Eintracht Frankfurt",    "timestamp": 1493566200000,      "wettbewerb": "Bundesliga"};entries["1494077400000BorussiaDortmundTSGHoffenheim"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Borussia Dortmund",        "mannschaft2": "TSG Hoffenheim",    "timestamp": 1494077400000,      "wettbewerb": "Bundesliga"};entries["1494171000000SCFreiburgFCSchalke04"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "SC Freiburg",        "mannschaft2": "FC Schalke 04",    "timestamp": 1494171000000,      "wettbewerb": "Bundesliga"};entries["1494682200000RBLeipzigFCBayernMünchen"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "RB Leipzig",        "mannschaft2": "FC Bayern München",    "timestamp": 1494682200000,      "wettbewerb": "Bundesliga"};entries["1494682200000BayerLeverkusenFCKöln"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Bayer Leverkusen",        "mannschaft2": "FC Köln",    "timestamp": 1494682200000,      "wettbewerb": "Bundesliga"};entries["1495287000000HerthaBSCBayerLeverkusen"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Hertha BSC",        "mannschaft2": "Bayer Leverkusen",    "timestamp": 1495287000000,      "wettbewerb": "Bundesliga"};entries["1495287000000BorussiaDortmundWerderBremen"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Borussia Dortmund",        "mannschaft2": "Werder Bremen",    "timestamp": 1495287000000,      "wettbewerb": "Bundesliga"};entries["1495287000000FCBayernMünchenSCFreiburg"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "FC Bayern München",        "mannschaft2": "SC Freiburg",    "timestamp": 1495287000000,      "wettbewerb": "Bundesliga"};entries["1495287000000EintrachtFrankfurtRBLeipzig"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Eintracht Frankfurt",        "mannschaft2": "RB Leipzig",    "timestamp": 1495287000000,      "wettbewerb": "Bundesliga"};entries["1493145900000BorussiaMönchengladbachEintrachtFrankfurt"]= {  "art": "Spiel",        "bonuspunkte": 2,        "fortschritt": "Halbfinale", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "Borussia Mönchengladbach",        "mannschaft2": "Eintracht Frankfurt",    "timestamp": 1493145900000,      "wettbewerb": "DFB Pokal"};entries["1493232300000FCBayernMünchenBorussiaDortmund"]= {  "art": "Spiel",        "bonuspunkte": 2,        "fortschritt": "Halbfinale", "land":"Deutschland","length":{"90": "90"},        "mannschaft1": "FC Bayern München",        "mannschaft2": "Borussia Dortmund",    "timestamp": 1493232300000,      "wettbewerb": "DFB Pokal"};entries["1491936300000BorussiaDortmundASMonaco"]= {  "art": "Hinspiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"International","length":{"90": "90"},        "mannschaft1": "Borussia Dortmund",        "mannschaft2": "AS Monaco",    "timestamp": 1491936300000,      "wettbewerb": "Champions League"};entries["1491936300000JuventusTurinFCBarcelona"]= {  "art": "Hinspiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"International","length":{"90": "90"},        "mannschaft1": "Juventus Turin",        "mannschaft2": "FC Barcelona",    "timestamp": 1491936300000,      "wettbewerb": "Champions League"};entries["1492022700000AtleticoMadridLeicesterCity"]= {  "art": "Hinspiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"International","length":{"90": "90"},        "mannschaft1": "Atletico Madrid",        "mannschaft2": "Leicester City",    "timestamp": 1492022700000,      "wettbewerb": "Champions League"};entries["1492022700000FCBayernMünchenRealMadrid"]= {  "art": "Hinspiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"International","length":{"90": "90"},        "mannschaft1": "FC Bayern München",        "mannschaft2": "Real Madrid",    "timestamp": 1492022700000,      "wettbewerb": "Champions League"};entries["1492627500000ASMonacoBorussiaDortmund"]= {  "art": "Rückspiel",        "bonuspunkte": 1,        "fortschritt": "Viertelfinale", "land":"International","length":{"90": "90"},        "mannschaft1": "AS Monaco",        "mannschaft2": "Borussia Dortmund",    "timestamp": 1492627500000,      "wettbewerb": "Champions League"};entries["1492627500000FCBarcelonaJuventusTurin"]= {  "art": "Rückspiel",        "bonuspunkte": 1,        "fortschritt": "Viertelfinale", "land":"International","length":{"90": "90"},        "mannschaft1": "FC Barcelona",        "mannschaft2": "Juventus Turin",    "timestamp": 1492627500000,      "wettbewerb": "Champions League"};entries["1492541100000LeicesterCityAtleticoMadrid"]= {  "art": "Rückspiel",        "bonuspunkte": 1,        "fortschritt": "Viertelfinale", "land":"International","length":{"90": "90"},        "mannschaft1": "Leicester City",        "mannschaft2": "Atletico Madrid",    "timestamp": 1492541100000,      "wettbewerb": "Champions League"};entries["1492541100000RealMadridFCBayernMünchen"]= {  "art": "Rückspiel",        "bonuspunkte": 1,        "fortschritt": "Viertelfinale", "land":"International","length":{"90": "90"},        "mannschaft1": "Real Madrid",        "mannschaft2": "FC Bayern München",    "timestamp": 1492541100000,      "wettbewerb": "Champions League"};entries["1492110300000RSCAnderlechtManchesterUnited"]= {  "art": "Hinspiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"International","length":{"90": "90"},        "mannschaft1": "RSC Anderlecht",        "mannschaft2": "Manchester United",    "timestamp": 1492110300000,      "wettbewerb": "Europa League"};entries["1492110300000AjaxAmsterdamFCSchalke04"]= {  "art": "Hinspiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"International","length":{"90": "90"},        "mannschaft1": "Ajax Amsterdam",        "mannschaft2": "FC Schalke 04",    "timestamp": 1492110300000,      "wettbewerb": "Europa League"};entries["1492715100000ManchesterUnitedRSCAnderlecht"]= {  "art": "Rückspiel",        "bonuspunkte": 1,        "fortschritt": "Viertelfinale", "land":"International","length":{"90": "90"},        "mannschaft1": "Manchester United",        "mannschaft2": "RSC Anderlecht",    "timestamp": 1492715100000,      "wettbewerb": "Europa League"};entries["1492715100000FCSchalke04AjaxAmsterdam"]= {  "art": "Rückspiel",        "bonuspunkte": 1,        "fortschritt": "Viertelfinale", "land":"International","length":{"90": "90"},        "mannschaft1": "FC Schalke 04",        "mannschaft2": "Ajax Amsterdam",    "timestamp": 1492715100000,      "wettbewerb": "Europa League"};entries["1491334200000AtleticoMadridRealSociedad"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Spanien","length":{"90": "90"},        "mannschaft1": "Atletico Madrid",        "mannschaft2": "Real Sociedad",    "timestamp": 1491334200000,      "wettbewerb": "Primera División"};entries["1491413400000FCBarcelonaFCSevilla"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Spanien","length":{"90": "90"},        "mannschaft1": "FC Barcelona",        "mannschaft2": "FC Sevilla",    "timestamp": 1491413400000,      "wettbewerb": "Primera División"};entries["1491590700000FCVillarrealAthleticBilbao"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Spanien","length":{"90": "90"},        "mannschaft1": "FC Villarreal",        "mannschaft2": "Athletic Bilbao",    "timestamp": 1491590700000,      "wettbewerb": "Primera División"};entries["1491660900000RealMadridAtleticoMadrid"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Spanien","length":{"90": "90"},        "mannschaft1": "Real Madrid",        "mannschaft2": "Atletico Madrid",    "timestamp": 1491660900000,      "wettbewerb": "Primera División"};entries["1491158700000SSCNeapelJuventusTurin"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Italien","length":{"90": "90"},        "mannschaft1": "SSC Neapel",        "mannschaft2": "Juventus Turin",    "timestamp": 1491158700000,      "wettbewerb": "Seria A"};entries["1491245100000InterMilanSampdoria"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Italien","length":{"90": "90"},        "mannschaft1": "Inter Milan",        "mannschaft2": "Sampdoria",    "timestamp": 1491245100000,      "wettbewerb": "Seria A"};entries["1491763500000LazioRomSSCNeapel"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Italien","length":{"90": "90"},        "mannschaft1": "Lazio Rom",        "mannschaft2": "SSC Neapel",    "timestamp": 1491763500000,      "wettbewerb": "Seria A"};entries["1492252200000InterMilanACMailand"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Italien","length":{"90": "90"},        "mannschaft1": "Inter Milan",        "mannschaft2": "AC Mailand",    "timestamp": 1492252200000,      "wettbewerb": "Seria A"};entries["1492368300000ASRomAtalantaBergamo"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Italien","length":{"90": "90"},        "mannschaft1": "AS Rom",        "mannschaft2": "Atalanta Bergamo",    "timestamp": 1492368300000,      "wettbewerb": "Seria A"};entries["1492886700000ACFlorenzInterMilan"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Italien","length":{"90": "90"},        "mannschaft1": "AC Florenz",        "mannschaft2": "Inter Milan",    "timestamp": 1492886700000,      "wettbewerb": "Seria A"};entries["1491660000000SVRiedSKRapidWien"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"Österreich","length":{"90": "90"},        "mannschaft1": "SV Ried",        "mannschaft2": "SK Rapid Wien",    "timestamp": 1491660000000,      "wettbewerb": "Bundesliga AT"};entries["1492869600000ChelseaTottenhamHotspur"]= {  "art": "Spiel",        "bonuspunkte": 2,        "fortschritt": "Halbfinale", "land":"England","length":{"90": "90"},        "mannschaft1": "Chelsea",        "mannschaft2": "Tottenham Hotspur",    "timestamp": 1492869600000,      "wettbewerb": "FA Cup"};entries["1492869600000ArsenalFCManchesterCity"]= {  "art": "Spiel",        "bonuspunkte": 2,        "fortschritt": "Halbfinale", "land":"England","length":{"90": "90"},        "mannschaft1": "Arsenal FC",        "mannschaft2": "Manchester City",    "timestamp": 1492869600000,      "wettbewerb": "FA Cup"};entries["1490727600000FrankreichSpanien"]= {  "art": "Spiel",        "bonuspunkte": 0,        "fortschritt": "Normal", "land":"International","length":{"90": "90"},        "mannschaft1": "Frankreich",        "mannschaft2": "Spanien",    "timestamp": 1490727600000,      "wettbewerb": "Freundschaft"};  
     console.log(entries);
     dbRefSpiele.update(entries);
 }
